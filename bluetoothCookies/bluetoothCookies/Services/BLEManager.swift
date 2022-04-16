@@ -15,6 +15,7 @@ struct Peripheral: Identifiable {
     let peripheral: CBPeripheral
     let name: String
     var rssi: Int
+    var lastUpdated: Date
 }
 
 // we need to import the CoreBluetooth framework, define a variable of type CBCentralManager, and define the required CBCentralManagerDelegate methods
@@ -79,7 +80,6 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     func stopAdvertising() {
         myPeripheralManager.stopAdvertising()
         myPeripheralManager.removeAllServices()
-        print(myPeripheralManager.isAdvertising)
         
     }
     
@@ -116,22 +116,18 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
             peripheralName = "Unknown"
         }
        
-        let newPeripheral = Peripheral(id: peripherals.count, peripheral: peripheral, name: peripheralName, rssi: RSSI.intValue)
+        let newPeripheral = Peripheral(id: peripherals.count, peripheral: peripheral, name: peripheralName, rssi: RSSI.intValue, lastUpdated: Date())
         print(newPeripheral)
         
         // check if peripheral already in array
         var inArray = false
         for (index, item) in peripherals.enumerated(){
-            // if found then update rssi
+            // if found then update rssi and last Updated
             if item.peripheral == newPeripheral.peripheral {
                 peripherals[index].rssi = newPeripheral.rssi
+                peripherals[index].lastUpdated = Date()
                 inArray = true
             }
-            // if it has stopped advertising its name will change to unknown, we need to delete it from the peripherals array
-            /*if item.peripheral == newPeripheral.peripheral{
-                peripherals.remove(at: index)
-                inArray = true
-            }*/
         }
         
         // if not in array then append
@@ -140,27 +136,28 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         }
         
         
-        
-        /*let peripheralToUpdate = peripherals.filter({$0.peripheral == newPeripheral.peripheral})
-        
-        if peripheralToUpdate.count == 1 {
-            peripherals[peripheralToUpdate.id].rssi = peripheral.rssi
-        } else{
-            peripherals.append(newPeripheral)
-        }
-        
-        // if peripheral advertising data we want append to list
-         let data = ["cookie_connection"]
-         if data == advertisementData {
-         
-         }
-         */
-        
     }
     
+    // function to check if peripherals in peripherals array are still advertising (active)
+    func checkIfActive() {
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [self] in
+            let now = Date()
+            for (index, item) in peripherals.enumerated() {
+                let difference = now.timeIntervalSince(item.lastUpdated)
+                // if the difference is bigger than five seconds then it is considered inactive
+                if difference > TimeInterval(5.0) {
+                    peripherals.remove(at: index)
+                }
+                
+            }
+            self.checkIfActive()
+        }
+        
+    }
     func startScanning() {
             print("startScanning")
-            myCentral.scanForPeripherals(withServices: nil, options: nil)
+            myCentral.scanForPeripherals(withServices: [peripheralServiceUUID], options: nil)
     }
     
     func stopScanning() {

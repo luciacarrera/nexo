@@ -69,6 +69,7 @@ struct DeviceView: View {
             if self.action == "buying" {
                 self.bleManager.startAdvertising()
             }
+            self.bleManager.checkIfActive()
             
         }
         
