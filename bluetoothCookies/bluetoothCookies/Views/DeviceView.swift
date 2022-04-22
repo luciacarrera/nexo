@@ -64,12 +64,11 @@ struct DeviceView: View {
                 }
         .onAppear {
             if self.action == "selling"{
-                    self.bleManager.startScanning()
+                self.bleManager.startScanning()
             }
             if self.action == "buying" {
                 self.bleManager.startAdvertising()
             }
-            self.bleManager.checkIfActive()
             
         }
         

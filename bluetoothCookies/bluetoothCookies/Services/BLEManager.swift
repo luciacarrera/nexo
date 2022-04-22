@@ -15,7 +15,10 @@ struct Peripheral: Identifiable {
     let peripheral: CBPeripheral
     let name: String
     var rssi: Int
-    var lastUpdated: Date
+    
+    static func == (p1: Peripheral, p2: Peripheral) -> Bool {
+            return p1.peripheral == p2.peripheral
+        }
 }
 
 // we need to import the CoreBluetooth framework, define a variable of type CBCentralManager, and define the required CBCentralManagerDelegate methods
@@ -34,6 +37,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     // status of bluetooth in device
     @Published var isSwitchedOn = false
     @Published var isConnected = false
+    @Published var keepScanning = true
     
     // array of peripherals found
     @Published var peripherals = [Peripheral]()
@@ -116,54 +120,62 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
             peripheralName = "Unknown"
         }
        
-        let newPeripheral = Peripheral(id: peripherals.count, peripheral: peripheral, name: peripheralName, rssi: RSSI.intValue, lastUpdated: Date())
+        let newPeripheral = Peripheral(id: peripherals.count, peripheral: peripheral, name: peripheralName, rssi: RSSI.intValue)
         print(newPeripheral)
         
-        // check if peripheral already in array
-        var inArray = false
-        for (index, item) in peripherals.enumerated(){
-            // if found then update rssi and last Updated
-            if item.peripheral == newPeripheral.peripheral {
-                peripherals[index].rssi = newPeripheral.rssi
-                peripherals[index].lastUpdated = Date()
-                inArray = true
-            }
-        }
+        // tempPeripherals constantly updates
+        var temp = [Peripheral]()
         
         // if not in array then append
-        if !inArray && newPeripheral.name != "Unknown" {
-            peripherals.append(newPeripheral)
+        if newPeripheral.name != "Unknown" {
+            temp.append(newPeripheral)
         }
+        print(temp)
         
+        // check if temp and peripherals contain the same or have changed
+        var hasChanged = false
         
-    }
-    
-    // function to check if peripherals in peripherals array are still advertising (active)
-    func checkIfActive() {
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [self] in
-            let now = Date()
-            for (index, item) in peripherals.enumerated() {
-                let difference = now.timeIntervalSince(item.lastUpdated)
-                // if the difference is bigger than five seconds then it is considered inactive
-                if difference > TimeInterval(5.0) {
-                    peripherals.remove(at: index)
+        // if they dont have the same number of entries then something has definitely changed
+        if temp.count != peripherals.count{
+            hasChanged = true
+            
+        // double checking something has changed even if same number of entries
+        } else{
+            if temp.count != 0 {
+                for i in 0...temp.count - 1 {
+                    if temp[i] == peripherals[i] {
+                        hasChanged = true
+                    }
                 }
-                
             }
-            self.checkIfActive()
+            
         }
         
+        if hasChanged {
+            peripherals = temp
+            print("changed")
+        }
+        // restart temp
+        temp = []
     }
+
+        
     func startScanning() {
+        if keepScanning {
             print("startScanning")
+            peripherals = []
             myCentral.scanForPeripherals(withServices: [peripheralServiceUUID], options: nil)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 10.0) {
+                self.startScanning()
+            }
+        }
     }
     
     func stopScanning() {
-            print("stopScanning")
-            myCentral.stopScan()
-            peripherals = []
+        print("stopScanning")
+        myCentral.stopScan()
+        peripherals = []
+        keepScanning = false
     }
     
 }
