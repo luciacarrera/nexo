@@ -82,6 +82,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     }
     
     func stopAdvertising() {
+        print("stopAdvertising")
         myPeripheralManager.stopAdvertising()
         myPeripheralManager.removeAllServices()
         

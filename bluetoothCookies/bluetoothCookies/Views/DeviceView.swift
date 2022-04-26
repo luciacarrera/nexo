@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CoreBluetooth
 
 @available(iOS 15.0, *)
 
@@ -13,12 +14,14 @@ import SwiftUI
 struct DeviceView: View {
 
     @ObservedObject var bleManager = BLEManager()
-    @State var action: String
-    @State var showConnectAlert: Bool = false
     
-    struct connectionDevice {
-        let peripheralName: String
-        let rssi: Int
+    
+    @State var action: String
+    @State private var selectedDevice: Device?
+    
+    struct Device: Identifiable {
+        var id: String { name }
+        let name: String
     }
 
     @available(iOS 15.0, *)
@@ -38,7 +41,7 @@ struct DeviceView: View {
                         Spacer()
                         Text(String(peripheral.rssi))
                     }.onTapGesture {
-                        showConnectAlert = true
+                        selectedDevice = Device(name: peripheral.name)
                         
                     }
                 }.frame(height: 300)
@@ -76,10 +79,15 @@ struct DeviceView: View {
                 
                 Spacer()
             }
-            .alert("Connect to ...",isPresented: $showConnectAlert){
-                Button("Connect"){
-                    
-                }
+            .alert(item: $selectedDevice) { show in
+                Alert(
+                    title: Text("Connect to " + show.name),
+                                message: Text("There is no undo"),
+                    primaryButton: .default(Text("Connect")) {
+                                    print("Connecting...")
+                                },
+                                secondaryButton: .cancel()
+                )
             }
             .onAppear {
                 if self.action == "selling"{
@@ -105,6 +113,6 @@ struct SwiftUIView_Previews: PreviewProvider {
         } else {
             // Fallback on earlier versions
         }
-        //bleManager.peripherals = [Peripheral(id: 3, name: "My iPhone", rssi: 5)]
+        
     }
 }
