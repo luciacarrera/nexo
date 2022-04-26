@@ -15,20 +15,28 @@ struct ActionView: View {
                 Spacer()
                 
                 // LInk to detail view
-                NavigationLink(
-                    destination: DeviceView(action: "selling"),
-                    label: {
-                        // Each author card in the scrollview
-                        Text("Sell Cookie")
-                    }).padding()
+                if #available(iOS 15.0, *) {
+                    NavigationLink(
+                        destination: DeviceView(action: "selling"),
+                        label: {
+                            // Each author card in the scrollview
+                            Text("Sell Cookie")
+                        }).padding()
+                } else {
+                    // Fallback on earlier versions
+                }
                 
-                NavigationLink(
-                    destination: DeviceView(action: "buying"),
-                    label: {
-                        // Each author card in the scrollview
-                        Text("Buy Cookie")
-                        
-                    }).padding()
+                if #available(iOS 15.0, *) {
+                    NavigationLink(
+                        destination: DeviceView(action: "buying"),
+                        label: {
+                            // Each author card in the scrollview
+                            Text("Buy Cookie")
+                            
+                        }).padding()
+                } else {
+                    // Fallback on earlier versions
+                }
                 Spacer()
             }
         }
