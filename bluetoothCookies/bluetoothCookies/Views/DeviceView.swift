@@ -31,7 +31,7 @@ struct DeviceView: View {
         if #available(iOS 15.0, *) {
             NavigationView{
                         ZStack {
-                            NavigationLink(destination: ResultView(received: "PlaceCard"), isActive: $navigate){
+                            NavigationLink(destination: ResultView(received: "PlaceCard").navigationBarBackButtonHidden(true), isActive: $navigate){
                             }
                             VStack (spacing: 10) {
                                 
