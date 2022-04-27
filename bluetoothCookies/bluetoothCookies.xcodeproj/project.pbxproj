@@ -13,6 +13,9 @@
 		9E1205F428077C0700F839CD /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E1205F328077C0700F839CD /* Preview Assets.xcassets */; };
 		9E1205FC28077DA800F839CD /* DeviceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E1205FB28077DA800F839CD /* DeviceView.swift */; };
 		9E589FF02818B2DB00EBDD6A /* ResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E589FEF2818B2DB00EBDD6A /* ResultView.swift */; };
+		9E589FF228199B1600EBDD6A /* DummyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E589FF128199B1600EBDD6A /* DummyView.swift */; };
+		9E589FF428199ED400EBDD6A /* Dummy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E589FF328199ED400EBDD6A /* Dummy.swift */; };
+		9E589FF728199F3100EBDD6A /* DummyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E589FF628199F3100EBDD6A /* DummyModel.swift */; };
 		9E67EE25280872A900D5FBB1 /* BLEManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E67EE24280872A900D5FBB1 /* BLEManager.swift */; };
 		9E67EE702808B8FB00D5FBB1 /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E67EE6F2808B8FB00D5FBB1 /* Action.swift */; };
 /* End PBXBuildFile section */
@@ -25,6 +28,9 @@
 		9E1205F328077C0700F839CD /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		9E1205FB28077DA800F839CD /* DeviceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceView.swift; sourceTree = "<group>"; };
 		9E589FEF2818B2DB00EBDD6A /* ResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultView.swift; sourceTree = "<group>"; };
+		9E589FF128199B1600EBDD6A /* DummyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyView.swift; sourceTree = "<group>"; };
+		9E589FF328199ED400EBDD6A /* Dummy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dummy.swift; sourceTree = "<group>"; };
+		9E589FF628199F3100EBDD6A /* DummyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyModel.swift; sourceTree = "<group>"; };
 		9E67EE24280872A900D5FBB1 /* BLEManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEManager.swift; sourceTree = "<group>"; };
 		9E67EE622808780A00D5FBB1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9E67EE6F2808B8FB00D5FBB1 /* Action.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
@@ -60,6 +66,7 @@
 		9E1205EB28077C0600F839CD /* bluetoothCookies */ = {
 			isa = PBXGroup;
 			children = (
+				9E589FF528199F2000EBDD6A /* ViewModels */,
 				9E67EE6E2808B8E700D5FBB1 /* Models */,
 				9E67EE622808780A00D5FBB1 /* Info.plist */,
 				9E67EE63280878A800D5FBB1 /* Info */,
@@ -85,9 +92,18 @@
 			children = (
 				9E1205EE28077C0600F839CD /* ActionView.swift */,
 				9E1205FB28077DA800F839CD /* DeviceView.swift */,
+				9E589FF128199B1600EBDD6A /* DummyView.swift */,
 				9E589FEF2818B2DB00EBDD6A /* ResultView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		9E589FF528199F2000EBDD6A /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				9E589FF628199F3100EBDD6A /* DummyModel.swift */,
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 		9E67EE26280874A900D5FBB1 /* Services */ = {
@@ -109,6 +125,7 @@
 			isa = PBXGroup;
 			children = (
 				9E67EE6F2808B8FB00D5FBB1 /* Action.swift */,
+				9E589FF328199ED400EBDD6A /* Dummy.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -183,10 +200,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9E589FF228199B1600EBDD6A /* DummyView.swift in Sources */,
 				9E1205EF28077C0600F839CD /* ActionView.swift in Sources */,
 				9E67EE25280872A900D5FBB1 /* BLEManager.swift in Sources */,
 				9E1205ED28077C0600F839CD /* bluetoothCookiesApp.swift in Sources */,
 				9E67EE702808B8FB00D5FBB1 /* Action.swift in Sources */,
+				9E589FF428199ED400EBDD6A /* Dummy.swift in Sources */,
+				9E589FF728199F3100EBDD6A /* DummyModel.swift in Sources */,
 				9E1205FC28077DA800F839CD /* DeviceView.swift in Sources */,
 				9E589FF02818B2DB00EBDD6A /* ResultView.swift in Sources */,
 			);
