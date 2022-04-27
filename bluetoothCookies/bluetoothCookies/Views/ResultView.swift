@@ -8,14 +8,16 @@
 import SwiftUI
 
 struct ResultView: View {
-    var received: String
+    @ObservedObject var bleManager = BLEManager()
+
     var body: some View {
+        let received = "Placecard"
         Text(received)
     }
 }
 
 struct ResultView_Previews: PreviewProvider {
     static var previews: some View {
-        ResultView(received: "hello")
+        ResultView()
     }
 }

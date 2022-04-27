@@ -1,0 +1,596 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		9EAA22C02819E6CB005E1B95 /* nexo_testApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAA22BF2819E6CB005E1B95 /* nexo_testApp.swift */; };
+		9EAA22C42819E6CC005E1B95 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9EAA22C32819E6CC005E1B95 /* Assets.xcassets */; };
+		9EAA22C72819E6CC005E1B95 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9EAA22C62819E6CC005E1B95 /* Preview Assets.xcassets */; };
+		9EAA22EF2819E733005E1B95 /* ConnectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAA22EE2819E733005E1B95 /* ConnectionView.swift */; };
+		9EAA22F12819E7EA005E1B95 /* ScanningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAA22F02819E7EA005E1B95 /* ScanningView.swift */; };
+		9EAA22F42819E899005E1B95 /* BLEManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAA22F32819E899005E1B95 /* BLEManager.swift */; };
+		9EAA22F82819EBDA005E1B95 /* CentralView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAA22F72819EBDA005E1B95 /* CentralView.swift */; };
+		9EAA22FF2819F860005E1B95 /* AdvertisingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAA22FE2819F860005E1B95 /* AdvertisingView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		9EAA22D22819E6CC005E1B95 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9EAA22B42819E6CB005E1B95 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9EAA22BB2819E6CB005E1B95;
+			remoteInfo = nexo_test;
+		};
+		9EAA22DC2819E6CC005E1B95 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9EAA22B42819E6CB005E1B95 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9EAA22BB2819E6CB005E1B95;
+			remoteInfo = nexo_test;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		9EAA22BC2819E6CB005E1B95 /* nexo_test.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = nexo_test.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9EAA22BF2819E6CB005E1B95 /* nexo_testApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = nexo_testApp.swift; sourceTree = "<group>"; };
+		9EAA22C32819E6CC005E1B95 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		9EAA22C62819E6CC005E1B95 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		9EAA22D12819E6CC005E1B95 /* nexo_testTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = nexo_testTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9EAA22DB2819E6CC005E1B95 /* nexo_testUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = nexo_testUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9EAA22EE2819E733005E1B95 /* ConnectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionView.swift; sourceTree = "<group>"; };
+		9EAA22F02819E7EA005E1B95 /* ScanningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanningView.swift; sourceTree = "<group>"; };
+		9EAA22F32819E899005E1B95 /* BLEManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEManager.swift; sourceTree = "<group>"; };
+		9EAA22F72819EBDA005E1B95 /* CentralView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CentralView.swift; sourceTree = "<group>"; };
+		9EAA22FD2819F2D8005E1B95 /* nexo-test-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "nexo-test-Info.plist"; sourceTree = SOURCE_ROOT; };
+		9EAA22FE2819F860005E1B95 /* AdvertisingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvertisingView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		9EAA22B92819E6CB005E1B95 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9EAA22CE2819E6CC005E1B95 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9EAA22D82819E6CC005E1B95 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		9EAA22B32819E6CB005E1B95 = {
+			isa = PBXGroup;
+			children = (
+				9EAA22BE2819E6CB005E1B95 /* nexo_test */,
+				9EAA22BD2819E6CB005E1B95 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		9EAA22BD2819E6CB005E1B95 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9EAA22BC2819E6CB005E1B95 /* nexo_test.app */,
+				9EAA22D12819E6CC005E1B95 /* nexo_testTests.xctest */,
+				9EAA22DB2819E6CC005E1B95 /* nexo_testUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		9EAA22BE2819E6CB005E1B95 /* nexo_test */ = {
+			isa = PBXGroup;
+			children = (
+				9EAA22FD2819F2D8005E1B95 /* nexo-test-Info.plist */,
+				9EAA22F52819E8BA005E1B95 /* Views */,
+				9EAA22C52819E6CC005E1B95 /* Preview Content */,
+				9EAA22BF2819E6CB005E1B95 /* nexo_testApp.swift */,
+				9EAA22C32819E6CC005E1B95 /* Assets.xcassets */,
+			);
+			path = nexo_test;
+			sourceTree = "<group>";
+		};
+		9EAA22C52819E6CC005E1B95 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				9EAA22C62819E6CC005E1B95 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		9EAA22F22819E882005E1B95 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				9EAA22F32819E899005E1B95 /* BLEManager.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		9EAA22F52819E8BA005E1B95 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				9EAA22EE2819E733005E1B95 /* ConnectionView.swift */,
+				9EAA22FE2819F860005E1B95 /* AdvertisingView.swift */,
+				9EAA22F02819E7EA005E1B95 /* ScanningView.swift */,
+				9EAA22F72819EBDA005E1B95 /* CentralView.swift */,
+				9EAA22F22819E882005E1B95 /* Services */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		9EAA22BB2819E6CB005E1B95 /* nexo_test */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9EAA22E52819E6CC005E1B95 /* Build configuration list for PBXNativeTarget "nexo_test" */;
+			buildPhases = (
+				9EAA22B82819E6CB005E1B95 /* Sources */,
+				9EAA22B92819E6CB005E1B95 /* Frameworks */,
+				9EAA22BA2819E6CB005E1B95 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = nexo_test;
+			productName = nexo_test;
+			productReference = 9EAA22BC2819E6CB005E1B95 /* nexo_test.app */;
+			productType = "com.apple.product-type.application";
+		};
+		9EAA22D02819E6CC005E1B95 /* nexo_testTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9EAA22E82819E6CC005E1B95 /* Build configuration list for PBXNativeTarget "nexo_testTests" */;
+			buildPhases = (
+				9EAA22CD2819E6CC005E1B95 /* Sources */,
+				9EAA22CE2819E6CC005E1B95 /* Frameworks */,
+				9EAA22CF2819E6CC005E1B95 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9EAA22D32819E6CC005E1B95 /* PBXTargetDependency */,
+			);
+			name = nexo_testTests;
+			productName = nexo_testTests;
+			productReference = 9EAA22D12819E6CC005E1B95 /* nexo_testTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		9EAA22DA2819E6CC005E1B95 /* nexo_testUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9EAA22EB2819E6CC005E1B95 /* Build configuration list for PBXNativeTarget "nexo_testUITests" */;
+			buildPhases = (
+				9EAA22D72819E6CC005E1B95 /* Sources */,
+				9EAA22D82819E6CC005E1B95 /* Frameworks */,
+				9EAA22D92819E6CC005E1B95 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9EAA22DD2819E6CC005E1B95 /* PBXTargetDependency */,
+			);
+			name = nexo_testUITests;
+			productName = nexo_testUITests;
+			productReference = 9EAA22DB2819E6CC005E1B95 /* nexo_testUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		9EAA22B42819E6CB005E1B95 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1330;
+				LastUpgradeCheck = 1330;
+				TargetAttributes = {
+					9EAA22BB2819E6CB005E1B95 = {
+						CreatedOnToolsVersion = 13.3.1;
+					};
+					9EAA22D02819E6CC005E1B95 = {
+						CreatedOnToolsVersion = 13.3.1;
+						TestTargetID = 9EAA22BB2819E6CB005E1B95;
+					};
+					9EAA22DA2819E6CC005E1B95 = {
+						CreatedOnToolsVersion = 13.3.1;
+						TestTargetID = 9EAA22BB2819E6CB005E1B95;
+					};
+				};
+			};
+			buildConfigurationList = 9EAA22B72819E6CB005E1B95 /* Build configuration list for PBXProject "nexo_test" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 9EAA22B32819E6CB005E1B95;
+			productRefGroup = 9EAA22BD2819E6CB005E1B95 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				9EAA22BB2819E6CB005E1B95 /* nexo_test */,
+				9EAA22D02819E6CC005E1B95 /* nexo_testTests */,
+				9EAA22DA2819E6CC005E1B95 /* nexo_testUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		9EAA22BA2819E6CB005E1B95 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9EAA22C72819E6CC005E1B95 /* Preview Assets.xcassets in Resources */,
+				9EAA22C42819E6CC005E1B95 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9EAA22CF2819E6CC005E1B95 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9EAA22D92819E6CC005E1B95 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		9EAA22B82819E6CB005E1B95 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9EAA22F82819EBDA005E1B95 /* CentralView.swift in Sources */,
+				9EAA22EF2819E733005E1B95 /* ConnectionView.swift in Sources */,
+				9EAA22F42819E899005E1B95 /* BLEManager.swift in Sources */,
+				9EAA22FF2819F860005E1B95 /* AdvertisingView.swift in Sources */,
+				9EAA22F12819E7EA005E1B95 /* ScanningView.swift in Sources */,
+				9EAA22C02819E6CB005E1B95 /* nexo_testApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9EAA22CD2819E6CC005E1B95 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9EAA22D72819E6CC005E1B95 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		9EAA22D32819E6CC005E1B95 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9EAA22BB2819E6CB005E1B95 /* nexo_test */;
+			targetProxy = 9EAA22D22819E6CC005E1B95 /* PBXContainerItemProxy */;
+		};
+		9EAA22DD2819E6CC005E1B95 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9EAA22BB2819E6CB005E1B95 /* nexo_test */;
+			targetProxy = 9EAA22DC2819E6CC005E1B95 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		9EAA22E32819E6CC005E1B95 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		9EAA22E42819E6CC005E1B95 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		9EAA22E62819E6CC005E1B95 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"nexo_test/Preview Content\"";
+				DEVELOPMENT_TEAM = 4M37P4SA8Z;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "nexo-test-Info.plist";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "luciacarrera.nexo-test";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		9EAA22E72819E6CC005E1B95 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"nexo_test/Preview Content\"";
+				DEVELOPMENT_TEAM = 4M37P4SA8Z;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "nexo-test-Info.plist";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "luciacarrera.nexo-test";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		9EAA22E92819E6CC005E1B95 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4M37P4SA8Z;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "luciacarrera.nexo-testTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/nexo_test.app/nexo_test";
+			};
+			name = Debug;
+		};
+		9EAA22EA2819E6CC005E1B95 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4M37P4SA8Z;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "luciacarrera.nexo-testTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/nexo_test.app/nexo_test";
+			};
+			name = Release;
+		};
+		9EAA22EC2819E6CC005E1B95 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4M37P4SA8Z;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "luciacarrera.nexo-testUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = nexo_test;
+			};
+			name = Debug;
+		};
+		9EAA22ED2819E6CC005E1B95 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4M37P4SA8Z;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "luciacarrera.nexo-testUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = nexo_test;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		9EAA22B72819E6CB005E1B95 /* Build configuration list for PBXProject "nexo_test" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9EAA22E32819E6CC005E1B95 /* Debug */,
+				9EAA22E42819E6CC005E1B95 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9EAA22E52819E6CC005E1B95 /* Build configuration list for PBXNativeTarget "nexo_test" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9EAA22E62819E6CC005E1B95 /* Debug */,
+				9EAA22E72819E6CC005E1B95 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9EAA22E82819E6CC005E1B95 /* Build configuration list for PBXNativeTarget "nexo_testTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9EAA22E92819E6CC005E1B95 /* Debug */,
+				9EAA22EA2819E6CC005E1B95 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9EAA22EB2819E6CC005E1B95 /* Build configuration list for PBXNativeTarget "nexo_testUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9EAA22EC2819E6CC005E1B95 /* Debug */,
+				9EAA22ED2819E6CC005E1B95 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 9EAA22B42819E6CB005E1B95 /* Project object */;
+}

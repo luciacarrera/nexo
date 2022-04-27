@@ -14,16 +14,10 @@ import CoreBluetooth
 struct DeviceView: View {
 
     @ObservedObject var bleManager = BLEManager()
-    
-    
     @State var action: String
     @State private var selectedDevice: Peripheral?
     @State private var navigate = false
     
-    struct Device: Identifiable {
-        var id: String { name }
-        let name: String
-    }
 
     @available(iOS 15.0, *)
     var body: some View {
@@ -31,7 +25,7 @@ struct DeviceView: View {
         if #available(iOS 15.0, *) {
             NavigationView{
                         ZStack {
-                            NavigationLink(destination: ResultView(received: "PlaceCard").navigationBarBackButtonHidden(true), isActive: $navigate){
+                            NavigationLink(destination: ResultView().navigationBarBackButtonHidden(true), isActive: $navigate){
                             }
                             VStack (spacing: 10) {
                                 

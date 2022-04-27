@@ -16,10 +16,9 @@ struct ActionView: View {
                 
                 // LInk to detail view
                 if #available(iOS 15.0, *) {
-                    let model = DummyModel()
+                    // let model = DummyModel()
                     NavigationLink(
-                        destination: DummyView(dummyArray: model.dummies)
-,
+                        destination: DeviceView(action: "selling"),
                         label: {
                             // Each author card in the scrollview
                             Text("Sell Cookie")

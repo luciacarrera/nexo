@@ -17,7 +17,6 @@
 		9E589FF428199ED400EBDD6A /* Dummy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E589FF328199ED400EBDD6A /* Dummy.swift */; };
 		9E589FF728199F3100EBDD6A /* DummyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E589FF628199F3100EBDD6A /* DummyModel.swift */; };
 		9E67EE25280872A900D5FBB1 /* BLEManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E67EE24280872A900D5FBB1 /* BLEManager.swift */; };
-		9E67EE702808B8FB00D5FBB1 /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E67EE6F2808B8FB00D5FBB1 /* Action.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,7 +32,6 @@
 		9E589FF628199F3100EBDD6A /* DummyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyModel.swift; sourceTree = "<group>"; };
 		9E67EE24280872A900D5FBB1 /* BLEManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEManager.swift; sourceTree = "<group>"; };
 		9E67EE622808780A00D5FBB1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		9E67EE6F2808B8FB00D5FBB1 /* Action.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,7 +122,6 @@
 		9E67EE6E2808B8E700D5FBB1 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				9E67EE6F2808B8FB00D5FBB1 /* Action.swift */,
 				9E589FF328199ED400EBDD6A /* Dummy.swift */,
 			);
 			path = Models;
@@ -204,7 +201,6 @@
 				9E1205EF28077C0600F839CD /* ActionView.swift in Sources */,
 				9E67EE25280872A900D5FBB1 /* BLEManager.swift in Sources */,
 				9E1205ED28077C0600F839CD /* bluetoothCookiesApp.swift in Sources */,
-				9E67EE702808B8FB00D5FBB1 /* Action.swift in Sources */,
 				9E589FF428199ED400EBDD6A /* Dummy.swift in Sources */,
 				9E589FF728199F3100EBDD6A /* DummyModel.swift in Sources */,
 				9E1205FC28077DA800F839CD /* DeviceView.swift in Sources */,

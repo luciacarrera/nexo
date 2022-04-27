@@ -1,0 +1,79 @@
+//
+//  ScanningView.swift
+//  nexo_test
+//
+//  Created by Lucía on 4/27/22.
+//
+
+import SwiftUI
+
+struct ScanningView: View {
+    @Environment(\.presentationMode) var presentationMode
+    @ObservedObject var bleManager = BLEManager()
+    
+    @State private var selectedDevice: Peripheral?
+    @State private var navigate = false
+    @State private var goBack = false
+    
+    var body: some View {
+        NavigationView{
+                    ZStack {
+                        NavigationLink(destination: CentralView().navigationBarBackButtonHidden(true), isActive: $navigate){
+                        }
+
+                        VStack (spacing: 10) {
+                            
+                            // MARK: Device List
+                            List(bleManager.peripherals) { peripheral in
+                                HStack {
+                                    Text(peripheral.name)
+                                    Spacer()
+                                    Text(String(peripheral.rssi))
+                                }.onTapGesture {
+                                    selectedDevice = peripheral
+                                }
+                            }
+                
+                                                    }
+                    }
+            
+    
+            .alert(item: $selectedDevice) { show in
+                Alert(
+                    title: Text("Connect to " + show.name),
+                                message: Text("There is no undo"),
+                    primaryButton: .default(Text("Connect")) {
+                        print("Connecting...")
+                        bleManager.connect(peripheral: show.peripheral)
+                        navigate.toggle()
+                        },
+                    secondaryButton: .cancel()
+                )
+            }
+        }
+        .navigationBarItems(leading:
+            Button(action: {
+                print("\n\n\n\n\n")
+                bleManager.stopScanning()
+              self.presentationMode.wrappedValue.dismiss()
+            }) {
+              HStack {
+                Image(systemName: "arrow.left")
+                Text("Back")
+              }
+          })
+                        
+        .onAppear {
+            bleManager.startScanning()
+        }
+
+            
+        
+    }
+}
+
+struct ScanningView_Previews: PreviewProvider {
+    static var previews: some View {
+        ScanningView()
+    }
+}

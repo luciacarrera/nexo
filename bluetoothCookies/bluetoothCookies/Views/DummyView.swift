@@ -20,7 +20,7 @@ struct DummyView: View {
         
             NavigationView{
                         ZStack {
-                            NavigationLink(destination: ResultView(received: "PlaceCard").navigationBarBackButtonHidden(true), isActive: $navigate){
+                            NavigationLink(destination: ResultView().navigationBarBackButtonHidden(true), isActive: $navigate){
                             }
                             VStack (spacing: 10) {
                                 
