@@ -21,6 +21,7 @@ struct Peripheral: Identifiable {
         }
 }
 
+
 // we need to import the CoreBluetooth framework, define a variable of type CBCentralManager, and define the required CBCentralManagerDelegate methods
 class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeripheralManagerDelegate {
     
@@ -41,6 +42,10 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     
     // array of peripherals found
     @Published var peripherals = [Peripheral]()
+    
+    // for connected peripherals
+    var connectedPeripheral: CBPeripheral?
+    
     
     // the following function initialises the central manager
     override init() {
@@ -159,7 +164,6 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         // restart temp
         temp = []
     }
-
         
     func startScanning() {
         if keepScanning {
@@ -179,4 +183,31 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         keepScanning = false
     }
     
+    // MARK: Connect to Peripheral
+    func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
+        // Successfully connected. Store reference to peripheral if not already done.
+        self.connectedPeripheral = peripheral
+    }
+    
+    func connect(peripheral: CBPeripheral) {
+        myCentral.connect(peripheral, options: nil)
+        print("Connected")
+     }
+    func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
+        // Handle error
+        print("failed to connect")
+    }
+    
+    func disconnect(peripheral: CBPeripheral) {
+        myCentral.cancelPeripheralConnection(peripheral)
+    }
+    
+    func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
+        if let error = error {
+            // Handle error
+            print("Error disconnecting")
+            return
+        }
+        // Successfully disconnected
+    }
 }
