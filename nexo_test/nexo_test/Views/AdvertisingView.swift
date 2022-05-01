@@ -10,11 +10,15 @@ import SwiftUI
 struct AdvertisingView: View {
     
     @Environment(\.presentationMode) var presentationMode
-    @ObservedObject var bleManager = BLEManager()
+    @EnvironmentObject var bleManager: BLEManager
 
     var body: some View {
         NavigationView{
-            Text("Advertising")
+            VStack{
+                Text("Advertising")
+                
+            }
+            
         }.navigationBarItems(leading:
             Button(action: {
                 bleManager.stopAdvertising()

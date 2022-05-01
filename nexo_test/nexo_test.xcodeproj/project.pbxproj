@@ -15,6 +15,7 @@
 		9EAA22F42819E899005E1B95 /* BLEManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAA22F32819E899005E1B95 /* BLEManager.swift */; };
 		9EAA22F82819EBDA005E1B95 /* CentralView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAA22F72819EBDA005E1B95 /* CentralView.swift */; };
 		9EAA22FF2819F860005E1B95 /* AdvertisingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAA22FE2819F860005E1B95 /* AdvertisingView.swift */; };
+		9EAA2301281A0BE6005E1B95 /* PeripheralView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAA2300281A0BE6005E1B95 /* PeripheralView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,7 @@
 		9EAA22F72819EBDA005E1B95 /* CentralView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CentralView.swift; sourceTree = "<group>"; };
 		9EAA22FD2819F2D8005E1B95 /* nexo-test-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "nexo-test-Info.plist"; sourceTree = SOURCE_ROOT; };
 		9EAA22FE2819F860005E1B95 /* AdvertisingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvertisingView.swift; sourceTree = "<group>"; };
+		9EAA2300281A0BE6005E1B95 /* PeripheralView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeripheralView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,6 +129,7 @@
 				9EAA22FE2819F860005E1B95 /* AdvertisingView.swift */,
 				9EAA22F02819E7EA005E1B95 /* ScanningView.swift */,
 				9EAA22F72819EBDA005E1B95 /* CentralView.swift */,
+				9EAA2300281A0BE6005E1B95 /* PeripheralView.swift */,
 				9EAA22F22819E882005E1B95 /* Services */,
 			);
 			path = Views;
@@ -267,6 +270,7 @@
 				9EAA22F42819E899005E1B95 /* BLEManager.swift in Sources */,
 				9EAA22FF2819F860005E1B95 /* AdvertisingView.swift in Sources */,
 				9EAA22F12819E7EA005E1B95 /* ScanningView.swift in Sources */,
+				9EAA2301281A0BE6005E1B95 /* PeripheralView.swift in Sources */,
 				9EAA22C02819E6CB005E1B95 /* nexo_testApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -432,6 +436,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -462,6 +467,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

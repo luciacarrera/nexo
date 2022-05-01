@@ -9,8 +9,8 @@ import SwiftUI
 
 struct ScanningView: View {
     @Environment(\.presentationMode) var presentationMode
-    @ObservedObject var bleManager = BLEManager()
-    
+    @EnvironmentObject var bleManager: BLEManager
+
     @State private var selectedDevice: Peripheral?
     @State private var navigate = false
     @State private var goBack = false
@@ -25,16 +25,18 @@ struct ScanningView: View {
                             
                             // MARK: Device List
                             List(bleManager.peripherals) { peripheral in
-                                HStack {
+                
+                                Button (action: {
+                                    selectedDevice = peripheral
+                                }, label: {
                                     Text(peripheral.name)
                                     Spacer()
                                     Text(String(peripheral.rssi))
-                                }.onTapGesture {
-                                    selectedDevice = peripheral
-                                }
+                                })
+                                    
+                    
                             }
-                
-                                                    }
+                        }
                     }
             
     
@@ -43,7 +45,6 @@ struct ScanningView: View {
                     title: Text("Connect to " + show.name),
                                 message: Text("There is no undo"),
                     primaryButton: .default(Text("Connect")) {
-                        print("Connecting...")
                         bleManager.connect(peripheral: show.peripheral)
                         navigate.toggle()
                         },

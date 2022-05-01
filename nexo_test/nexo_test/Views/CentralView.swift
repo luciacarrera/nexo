@@ -8,10 +8,18 @@
 import SwiftUI
 
 struct CentralView: View {
-    //@State var selectedPeripheral: Peripheral?
+
+    @EnvironmentObject var bleManager: BLEManager
 
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack{
+            Text("Trying to connect")
+            if bleManager.isConnected {
+                Text("Connected").foregroundColor(.green)
+            } else{
+                Text("Disconnected").foregroundColor(.red)
+            }
+        }
     }
 }
 

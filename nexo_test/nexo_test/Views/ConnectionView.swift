@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ConnectionView: View {
-    @ObservedObject var bleManager = BLEManager()
+    @StateObject var bleManager = BLEManager()
     @State private var navigate1 = false
     @State private var navigate2 = false
     @State private var showAlert = false
@@ -54,6 +54,7 @@ struct ConnectionView: View {
                 }
             }
         }
+        .environmentObject(bleManager)
     }
 }
 

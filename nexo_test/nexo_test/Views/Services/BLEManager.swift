@@ -32,6 +32,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     let peripheralServiceUUID = CBUUID(string: "00001011-0000-1100-1000-00123456789A")
     let peripheralCharacteristicUUID = CBUUID(string: "00001012-0000-1100-1000-00123456789A")
     var myService: CBMutableService!
+    var myPeripheral: CBPeripheral!
     
     // status of bluetooth in device
     @Published var isSwitchedOn = false
@@ -42,7 +43,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     @Published var peripherals = [Peripheral]()
     
     // for connected peripherals
-    var connectedPeripheral: CBPeripheral?
+    //@Published var connectedPeripheral: CBPeripheral?
     
     
     // the following function initialises the central manager
@@ -56,7 +57,6 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     
     // MARK: Code for Peripheral Manager
     func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
-        
     }
     
     func addServicesAndCharacteristics() {
@@ -105,6 +105,8 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         else {
             isSwitchedOn = false
         }
+        self.isConnected = isConnected
+        
     }
     
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
@@ -131,9 +133,8 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         var temp = [Peripheral]()
         
         // if not in array then append
-        if newPeripheral.name != "Unknown" {
-            temp.append(newPeripheral)
-        }
+        temp.append(newPeripheral)
+        
         print(temp)
         
         // check if temp and peripherals contain the same or have changed
@@ -161,40 +162,45 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         }
         // restart temp
         temp = []
+    
     }
         
     func startScanning() {
-        if keepScanning {
-            print("startScanning")
-            peripherals = []
-            myCentral.scanForPeripherals(withServices: [peripheralServiceUUID], options: nil)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 10.0) {
+        print("Scanning...")
+        peripherals = []
+        myCentral.scanForPeripherals(withServices: [peripheralServiceUUID], options: nil)
+            /* DispatchQueue.main.asyncAfter(deadline: .now() + 10.0) {
                 self.startScanning()
-            }
-        }
+            } */
     }
     
     func stopScanning() {
         print("stopScanning")
         myCentral.stopScan()
         peripherals = []
-        keepScanning = false
     }
     
     // MARK: Connect to Peripheral
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         // Successfully connected. Store reference to peripheral if not already done.
-        self.connectedPeripheral = peripheral
+        print("\n\nCentral connected\n\n")
+        myPeripheral.discoverServices([peripheralServiceUUID]) // look for what we want to look for specifically
+        
     }
     
     func connect(peripheral: CBPeripheral) {
+        myPeripheral = peripheral
         myCentral.connect(peripheral, options: nil)
-        print("Connected")
+        isConnected = true
+        myCentral.stopScan()
+        myPeripheral.delegate = self
      }
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
         // Handle error
         print("failed to connect")
+
     }
+    
     
     func disconnect(peripheral: CBPeripheral) {
         myCentral.cancelPeripheralConnection(peripheral)
@@ -208,4 +214,111 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         }
         // Successfully disconnected
     }
+    
+ 
+    // Call after connecting to peripheral
+    func discoverServices(peripheral: CBPeripheral) {
+        peripheral.discoverServices(nil)
+    }
+     
+    // Call after discovering services
+    func discoverCharacteristics(peripheral: CBPeripheral) {
+        guard let services = peripheral.services else {
+            return
+        }
+        for service in services {
+            peripheral.discoverCharacteristics(nil, for: service)
+        }
+    }
+    
+}
+
+extension BLEManager: CBPeripheralDelegate {
+    // In CBPeripheralDelegate class/extension
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
+        print("discover characteristics")
+        for service in peripheral.services! {
+            print(service)
+            if service.uuid == peripheralServiceUUID {
+                peripheral.discoverCharacteristics([peripheralServiceUUID], for: service)
+            }
+        }
+    }
+    
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
+        
+        for characteristic in service.characteristics! {
+            if characteristic.uuid == peripheralCharacteristicUUID {
+                peripheral.setNotifyValue(true, for: characteristic) // subscribes to characteristic?
+            }
+            /* ..UUID ||
+             characteristic.uuid == heartRateCharacteristicUUID ||
+             characteristic.uuid == runningSpeedCharacteristicUUID */
+        }
+    }
+    
+    /*
+     *   This callback lets us know more data has arrived via notification on the characteristic
+     */
+    func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
+        // Deal with errors (if any)
+        if let error = error {
+            print("Error discovering characteristics: %s", error.localizedDescription)
+            return
+        }
+        
+        guard let characteristicData = characteristic.value,
+            let stringFromData = String(data: characteristicData, encoding: .utf8) else { return }
+        
+        print("Received %d bytes: %s", characteristicData.count, stringFromData)
+        /*
+         // Have we received the end-of-message token?
+         if stringFromData == "EOM" {
+             // End-of-message case: show the data.
+             // Dispatch the text view update to the main queue for updating the UI, because
+             // we don't know which thread this method will be called back on.
+             DispatchQueue.main.async() {
+                 self.textView.text = String(data: self.data, encoding: .utf8)
+             }
+             
+             // Write test data
+             writeData()
+         } else {
+             // Otherwise, just append the data to what we have previously received.
+             data.append(characteristicData)
+         } */
+    }
+
+    /*
+     *  The peripheral letting us know whether our subscribe/unsubscribe happened or not
+     */
+    func peripheral(_ peripheral: CBPeripheral, didUpdateNotificationStateFor characteristic: CBCharacteristic, error: Error?) {
+        // Deal with errors (if any)
+        if let error = error {
+            print("Error changing notification state: %s", error.localizedDescription)
+            return
+        }
+        
+        // Exit if it's not the transfer characteristic
+        guard characteristic.uuid == peripheralCharacteristicUUID else { return }
+        
+        if characteristic.isNotifying {
+            // Notification has started
+            print("Notification began on %@", characteristic)
+        } else {
+            // Notification has stopped, so disconnect from the peripheral
+            print("Notification stopped on %@. Disconnecting", characteristic)
+        }
+        
+    }
+    
+    /*
+     *  This is called when peripheral is ready to accept more data when using write without response
+     */
+    func peripheralIsReady(toSendWriteWithoutResponse peripheral: CBPeripheral) {
+        print("Peripheral is ready, send data")
+    }
+    
+    
+    
 }
