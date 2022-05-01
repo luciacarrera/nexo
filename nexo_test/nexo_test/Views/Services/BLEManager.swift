@@ -30,7 +30,9 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     
     // UUID constants in our BLEManager class: one for the peripheral service and another for its characteristic.
     let peripheralServiceUUID = CBUUID(string: "00001011-0000-1100-1000-00123456789A")
-    let peripheralCharacteristicUUID = CBUUID(string: "00001012-0000-1100-1000-00123456789A")
+    let notifyCharacteristicUUID = CBUUID(string: "00001012-0000-1100-1000-00123456789A")
+    let readCharacteristicUUID = CBUUID(string: "00001012-0000-1100-1000-00123456790A")
+
     var myService: CBMutableService!
     var myPeripheral: CBPeripheral!
     
@@ -57,14 +59,31 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     
     // MARK: Code for Peripheral Manager
     func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
+        print("peripheralManagerDidUpdateState \(peripheral.state.rawValue)")
+                
+            if myPeripheralManager.state == .poweredOn {
+                self.myService = CBMutableService(type: peripheralServiceUUID, primary: true)
+            }
+    }
+    
+    func peripheralManager(_ peripheral: CBPeripheralManager, didAdd service: CBService, error: Error?) {
+         if let error = error {
+            print("Add service failed: \(error.localizedDescription)")
+            return
+        }
+        print("Add service succeeded")
     }
     
     func addServicesAndCharacteristics() {
-        myService = CBMutableService(type: peripheralServiceUUID, primary: true)
-        let charData = "COOKIES"
-        let myCharacteristic = CBMutableCharacteristic(type: peripheralCharacteristicUUID, properties: [.read], value: charData.data(using: .utf8), permissions: [.readable])
-        myService.characteristics = [myCharacteristic]
-        myPeripheralManager.add(myService)
+        let readCharData = "READ"
+
+        let readChar = CBMutableCharacteristic.init(type: readCharacteristicUUID, properties: [.read], value: readCharData.data(using: .utf8), permissions: [.readable])
+        let notifyChar = CBMutableCharacteristic.init(type: notifyCharacteristicUUID, properties: [.read,.notify,.write], value:nil, permissions: [.readable,.writeable])
+        self.myService?.characteristics = []
+        self.myService?.characteristics?.append(readChar)
+        self.myService?.characteristics?.append(notifyChar)
+        self.myPeripheralManager.add(myService!)
+        print(myService)
         
     }
     
@@ -75,6 +94,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
          */
         // first check if service has been added
         if myService == nil {
+            print("adding services and chars")
                 addServicesAndCharacteristics()
         }
 
@@ -88,6 +108,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         print("stopAdvertising")
         myPeripheralManager.stopAdvertising()
         myPeripheralManager.removeAllServices()
+        myService = nil
         
     }
     
@@ -189,11 +210,12 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     }
     
     func connect(peripheral: CBPeripheral) {
-        myPeripheral = peripheral
+        print(peripheral)
+        self.myPeripheral = peripheral
         myCentral.connect(peripheral, options: nil)
         isConnected = true
         myCentral.stopScan()
-        myPeripheral.delegate = self
+        self.myPeripheral.delegate = self
      }
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
         // Handle error
@@ -218,7 +240,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
  
     // Call after connecting to peripheral
     func discoverServices(peripheral: CBPeripheral) {
-        peripheral.discoverServices(nil)
+        peripheral.discoverServices([peripheralServiceUUID])
     }
      
     // Call after discovering services
@@ -236,24 +258,35 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
 extension BLEManager: CBPeripheralDelegate {
     // In CBPeripheralDelegate class/extension
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
-        print("discover characteristics")
-        for service in peripheral.services! {
+        print("discover services")
+        print(peripheral.services)
+        for service in myPeripheral.services! {
             print(service)
-            if service.uuid == peripheralServiceUUID {
-                peripheral.discoverCharacteristics([peripheralServiceUUID], for: service)
-            }
+
+            peripheral.discoverCharacteristics([peripheralServiceUUID], for: service)
         }
     }
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
-        
-        for characteristic in service.characteristics! {
-            if characteristic.uuid == peripheralCharacteristicUUID {
-                peripheral.setNotifyValue(true, for: characteristic) // subscribes to characteristic?
+        print("discovering characteristics")
+        if let chars = service.characteristics {
+            print(chars)
+            for characteristic in chars {
+                /*if characteristic.uuid == readCharacteristicUUID || characteristic.uuid == notifyCharacteristicUUID {
+                    peripheral.setNotifyValue(true, for: characteristic) // subscribes to characteristic?
+                }*/
+                print(characteristic)
+                if characteristic.properties.contains(.read) {
+                  print("\(characteristic.uuid): properties contains .read")
+                }
+                if characteristic.properties.contains(.notify) {
+                  print("\(characteristic.uuid): properties contains .notify")
+                }
+
+                /* ..UUID ||
+                 characteristic.uuid == heartRateCharacteristicUUID ||
+                 characteristic.uuid == runningSpeedCharacteristicUUID */
             }
-            /* ..UUID ||
-             characteristic.uuid == heartRateCharacteristicUUID ||
-             characteristic.uuid == runningSpeedCharacteristicUUID */
         }
     }
     
@@ -300,7 +333,7 @@ extension BLEManager: CBPeripheralDelegate {
         }
         
         // Exit if it's not the transfer characteristic
-        guard characteristic.uuid == peripheralCharacteristicUUID else { return }
+        guard characteristic.uuid == readCharacteristicUUID || characteristic.uuid == notifyCharacteristicUUID else { return }
         
         if characteristic.isNotifying {
             // Notification has started
@@ -319,6 +352,8 @@ extension BLEManager: CBPeripheralDelegate {
         print("Peripheral is ready, send data")
     }
     
+    func peripheral(_ peripheral: CBPeripheral, didModifyServices invalidatedServices: [CBService]) {
+    }
     
     
 }
