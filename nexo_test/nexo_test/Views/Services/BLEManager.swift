@@ -44,6 +44,8 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     // service and peripheral
     var myService: CBMutableService! // Beter name ??
     var myPeripheral: CBPeripheral!  // Beter name ??
+    var myReadData = Data() // Necessary ??
+    var myReadString: String = "Unknown"// Necessary ??
     
     // status of bluetooth in device
     @Published var isSwitchedOn = false
@@ -188,7 +190,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         let readChar = CBMutableCharacteristic.init(type: self.readCharacteristicUUID, properties: [.read], value: readCharData.data(using: .utf8), permissions: [.readable])
         
         // create notification characteristic
-        let notifyChar = CBMutableCharacteristic.init(type: self.notifyCharacteristicUUID, properties: [.read,.notify,.write], value:nil, permissions: [.readable,.writeable])
+        let notifyChar = CBMutableCharacteristic.init(type: self.notifyCharacteristicUUID, properties: [.notify,.write], value:nil, permissions: [.readable,.writeable])
         
         // add characteristics to service
         self.myService?.characteristics = []
@@ -330,25 +332,30 @@ extension BLEManager: CBPeripheralDelegate {
         }
     }
     
-    // TODO: CLEAN CODE BELOW
     // Function that discovers the characteristics of a service in the peripheral
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
+        
+        // If error discovering characteristics
+        if let error = error {
+            print("Error discovering characteristics: %s", error.localizedDescription)
+            return
+        }
         
         print("Discovering characteristics...")
         
         // Unwrap characteristics
         if let chars = service.characteristics {
-            print(chars)
             for characteristic in chars {
                 /*if characteristic.uuid == readCharacteristicUUID || characteristic.uuid == notifyCharacteristicUUID {
                     peripheral.setNotifyValue(true, for: characteristic) // subscribes to characteristic?
                 }*/
                 print(characteristic)
                 if characteristic.properties.contains(.read) {
-                  print("\(characteristic.uuid): properties contains .read")
+                    print("\(characteristic.uuid): properties contains .read")
+                    peripheral.readValue(for: characteristic)
                 }
                 if characteristic.properties.contains(.notify) {
-                  print("\(characteristic.uuid): properties contains .notify")
+                    print("\(characteristic.uuid): properties contains .notify")
                 }
 
                 /* ..UUID ||
@@ -358,9 +365,29 @@ extension BLEManager: CBPeripheralDelegate {
         }
     }
     
+    // Function to check update value of a specific characteristic
+    func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
+      
+        // Handles type of characteristic
+        switch characteristic.uuid {
+            
+            // If read characteristic
+            case readCharacteristicUUID:
+                print(characteristic.value ?? "No value")
+                guard let characteristicData = characteristic.value,
+                      let stringFromData = String(data: characteristicData, encoding: .utf8) else { return }
+                self.myReadData.append(characteristicData)
+                self.myReadString = stringFromData
+            
+            // If other type of characteristic
+            default:
+              print("Unhandled Characteristic UUID: \(characteristic.uuid)")
+        }
+    }
+    // TODO: CLEAN CODE BELOW
     /*
      *   This callback lets us know more data has arrived via notification on the characteristic
-     */
+     
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         // Deal with errors (if any)
         if let error = error {
@@ -422,6 +449,6 @@ extension BLEManager: CBPeripheralDelegate {
     
     func peripheral(_ peripheral: CBPeripheral, didModifyServices invalidatedServices: [CBService]) {
     }
-    
+     */
     
 }

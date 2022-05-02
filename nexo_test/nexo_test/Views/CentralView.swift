@@ -19,6 +19,8 @@ struct CentralView: View {
             } else{
                 Text("Disconnected").foregroundColor(.red)
             }
+            Spacer()
+            Text(bleManager.myReadString)
         }
     }
 }
