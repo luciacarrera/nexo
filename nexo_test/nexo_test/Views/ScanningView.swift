@@ -24,7 +24,7 @@ struct ScanningView: View {
                         VStack (spacing: 10) {
                             
                             // MARK: Device List
-                            List(bleManager.peripherals) { peripheral in
+                            List(bleManager.scannedPeripherals) { peripheral in
                 
                                 Button (action: {
                                     selectedDevice = peripheral

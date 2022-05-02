@@ -104,59 +104,66 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         let newPeripheral = Peripheral(id: scannedPeripherals.count, peripheral: peripheral, name: peripheralName, rssi: RSSI.intValue)
         print(newPeripheral)
         
+        // Append new peripherals and disconnect ones that no longer exist
         var temp = [Peripheral]()
         temp.append(newPeripheral)
         print(temp)
-        
         // check if temp and peripherals contain the same or have changed
         var hasChanged = false
-        
         // if they dont have the same number of entries then something has definitely changed
-        if temp.count != scannedPeripherals.count{
+        if temp.count != self.scannedPeripherals.count{
             hasChanged = true
-            
         // double checking something has changed even if same number of entries
         } else{
             if temp.count != 0 {
                 for i in 0...temp.count - 1 {
-                    if temp[i] == scannedPeripherals[i] {
+                    if temp[i] == self.scannedPeripherals[i] {
                         hasChanged = true
                     }
                 }
             }
-            
         }
-        
+        // if it has changed then update actual array
         if hasChanged {
-            scannedPeripherals = temp
-            print("changed")
+            self.scannedPeripherals = temp
+            print("Scanned Peripherals changed")
         }
-        // restart temp
-        temp = []
     
     }
+    
+    // Function that once Central is connected tries to discover the peripherals
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
+        
         // Successfully connected. Store reference to peripheral if not already done.
         print("\n\nCentral connected\n\n")
-        myPeripheral.discoverServices([peripheralServiceUUID]) // look for what we want to look for specifically
+        self.myPeripheral.discoverServices([peripheralServiceUUID]) // look for what we want to look for specifically
         
     }
+    
+    // Function that handles error if central fails to connect to peripheral
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
+        
         // Handle error
-        print("failed to connect")
-
+        print("Error connecting")
     }
+    
+    // Function to handle disconnection from Peripheral
+    // Missing ??
+    
+    // Handles error if Central doesn't succesfully disconnect to Peripheral
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
-        if let error = error {
+        
+        if error != nil {
             // Handle error
             print("Error disconnecting")
             return
         }
-        // Successfully disconnected
     }
     
     //--------------------------------------------------------------------------------------------------------------------
     // MARK: Peripheral Manager
+    // Functions that control the Peripheral Manager
+    
     // Function that checks if bluetooth is on and if so creates the service for the peripheral
     func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
         
@@ -170,6 +177,12 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         
     }
     
+    // Function that notifies developer if peripheral has started advertising
+    func peripheralManagerDidStartAdvertising(_ peripheral: CBPeripheralManager, error: Error?) {
+        print("Advertising started...")
+    }
+    
+    // Should this be somewhere else ??
     // Function that adds services and characteristeristics to myPeripheral
     func addServicesAndCharacteristics() {
         
@@ -186,9 +199,9 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         self.myService?.characteristics?.append(notifyChar)
         
         // add service to peripheral manager
-        self.myPeripheralManager.add(self.myService!)
+        self.myPeripheralManager.add(self.myService!) // DOES THIS WORK ??
         
-        print(self.myService) // delete
+        print(self.myService ?? "No Service in Peripheral") // delete
     }
     
     // Function that checks if the myservice has been added correctly
@@ -203,76 +216,82 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         print("Add service succeeded")
     }
     
+    //--------------------------------------------------------------------------------------------------------------------
+    // MARK: View Functions
+    // Functions called by the views to access the Bluetooth Managers
     
-    
+    /* ADVERTISING */
+    // Function View calls when they want the Peripheral to start Advertising
     func startAdvertising() {
-        /*
-         - CBAdvertisementDataLocalNameKey: This is our peripheral’s local name that other central devices will be able to see in their scan result.
-         - CBAdvertisementDataServiceUUIDsKey: This is an array (list) of UUIDs of each service that our peripheral is exposing to a central device.
-         */
+        
+        // Definitions:
+        // - CBAdvertisementDataLocalNameKey: This is our peripheral’s local name that other central devices will be able to see in their scan result.
+        // - CBAdvertisementDataServiceUUIDsKey: This is an array (list) of UUIDs of each service that our peripheral is exposing to a central device.
+
         // first check if service has been added
-        if myService == nil {
-            print("adding services and chars")
-                addServicesAndCharacteristics()
+        if self.myService == nil {
+            print("Adding services and chars...")
+            self.addServicesAndCharacteristics()
         }
 
-        myPeripheralManager.startAdvertising([
+        // Tell the Peripheral Manager to start advertising
+        self.myPeripheralManager.startAdvertising([
             CBAdvertisementDataLocalNameKey: UIDevice.current.name,
             CBAdvertisementDataServiceUUIDsKey: [peripheralServiceUUID]
         ])
     }
     
+    // Function a view calls to tell the peripheral to stop advertisiting
     func stopAdvertising() {
-        print("stopAdvertising")
-        myPeripheralManager.stopAdvertising()
-        myPeripheralManager.removeAllServices()
-        myService = nil
+        
+        // Stop & Remove all services to completely stop it
+        self.myPeripheralManager.stopAdvertising()
+        self.myPeripheralManager.removeAllServices()
+        self.myService = nil
+        print("Advertising stopped...")
         
     }
     
-    // prints if if is advertising
-    func peripheralManagerDidStartAdvertising(_ peripheral: CBPeripheralManager, error: Error?) {
-        print("Advertising started...")
-    }
-    
-    // MARK: Code forCentral Manager
-    
-        
+    /* SCANNING */
+    // Function that view calls to tell central to start scanning for peripherals
     func startScanning() {
-        print("Scanning...")
-        scannedPeripherals = []
-        myCentral.scanForPeripherals(withServices: [peripheralServiceUUID], options: nil)
+
+        self.scannedPeripherals = []
+        self.myCentral.scanForPeripherals(withServices: [peripheralServiceUUID], options: nil)
+        print("Scanning started...")
             /* DispatchQueue.main.asyncAfter(deadline: .now() + 10.0) {
                 self.startScanning()
             } */
     }
     
+    // Function that view calls to tell central to stop scanning for peripherals
     func stopScanning() {
-        print("stopScanning")
+        
         myCentral.stopScan()
         scannedPeripherals = []
+        print("Scanning stopped...")
     }
     
-    // MARK: Connect to Peripheral
-    
+    /* CONNECTING */
+    // Function that view calls to tell central to connect to a specific peripheral
     func connect(peripheral: CBPeripheral) {
-        print(peripheral)
+        print("Peripheral to connect to: \(peripheral)")
         self.myPeripheral = peripheral
-        myCentral.connect(peripheral, options: nil)
-        isConnected = true
-        myCentral.stopScan()
+        self.myCentral.connect(peripheral, options: nil)
+        self.isConnected = true
+        self.myCentral.stopScan()
         self.myPeripheral.delegate = self
+        print("Connecting started...")
      }
 
-    
-    
+    // Function that view calls to tell central to disconnect to a specific peripheral
     func disconnect(peripheral: CBPeripheral) {
         myCentral.cancelPeripheralConnection(peripheral)
+        print("Connecting started...")
     }
     
-    
-    
- 
+    /* DISCOVERING */
+    // Am I using these ?? comment and test
     // Call after connecting to peripheral
     func discoverServices(peripheral: CBPeripheral) {
         peripheral.discoverServices([peripheralServiceUUID])
@@ -287,23 +306,33 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
             peripheral.discoverCharacteristics(nil, for: service)
         }
     }
-    
 }
 
-extension BLEManager: CBPeripheralDelegate {
-    // In CBPeripheralDelegate class/extension
-    func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
-        print("discover services")
-        print(peripheral.services)
-        for service in myPeripheral.services! {
-            print(service)
 
-            peripheral.discoverCharacteristics([peripheralServiceUUID], for: service)
+//------------------------------------------------------------------------------------------------------------------------
+// MARK: Peripheral Delegate
+// Extension for the Peripheral Delegate
+extension BLEManager: CBPeripheralDelegate {
+    
+    // Function that discover the services in the peripheral
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
+        
+        print("Discovering services...")
+        print(peripheral.services ?? "No Services")
+        
+        // Once services discovered we call for function to discover their characteristics
+        for service in myPeripheral.services! {
+            peripheral.discoverCharacteristics([notifyCharacteristicUUID], for: service)
         }
     }
     
+    // TODO: CLEAN CODE BELOW
+    // Function that discovers the characteristics of a service in the peripheral
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
-        print("discovering characteristics")
+        
+        print("Discovering characteristics...")
+        
+        // Unwrap characteristics
         if let chars = service.characteristics {
             print(chars)
             for characteristic in chars {
