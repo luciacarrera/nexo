@@ -4,10 +4,14 @@
 //  Created by Lucía on 4/14/22.
 //
 
+//------------------------------------------------------------------------------------------------------------------------
+// MARK: Imports
 import Foundation
 import CoreBluetooth
 import UIKit
 
+//------------------------------------------------------------------------------------------------------------------------
+// MARK: Peripheral Struct
 // we will create an array where we can append the name and RSSI of every device we discover by scanning
 struct Peripheral: Identifiable {
     let id: Int
@@ -15,15 +19,19 @@ struct Peripheral: Identifiable {
     let name: String
     var rssi: Int
     
+    // function to compare peripherals scanned to see if we already have them in array
     static func == (p1: Peripheral, p2: Peripheral) -> Bool {
             return p1.peripheral == p2.peripheral
         }
 }
 
+//------------------------------------------------------------------------------------------------------------------------
+// MARK: BLE Manager Class
 // we need to import the CoreBluetooth framework, define a variable of type CBCentralManager, and define the required CBCentralManagerDelegate methods
 class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeripheralManagerDelegate {
     
-    
+    //--------------------------------------------------------------------------------------------------------------------
+    // MARK: Global Vars & Consts
     // central and peripheral bluetooth manager
     var myCentral: CBCentralManager!
     var myPeripheralManager: CBPeripheralManager!
@@ -33,59 +41,169 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     let notifyCharacteristicUUID = CBUUID(string: "00001012-0000-1100-1000-00123456789A")
     let readCharacteristicUUID = CBUUID(string: "00001012-0000-1100-1000-00123456790A")
 
-    var myService: CBMutableService!
-    var myPeripheral: CBPeripheral!
+    // service and peripheral
+    var myService: CBMutableService! // Beter name ??
+    var myPeripheral: CBPeripheral!  // Beter name ??
     
     // status of bluetooth in device
     @Published var isSwitchedOn = false
     @Published var isConnected = false
-    @Published var keepScanning = true
+    @Published var keepScanning = true // ??
     
     // array of peripherals found
-    @Published var peripherals = [Peripheral]()
+    @Published var scannedPeripherals = [Peripheral]()
     
-    // for connected peripherals
-    //@Published var connectedPeripheral: CBPeripheral?
-    
-    
-    // the following function initialises the central manager
+    //--------------------------------------------------------------------------------------------------------------------
+    // MARK: BLE Initialization
+    // the following function initialises the central manager & Peripheral Manager
     override init() {
-            super.init()
-
-            myCentral = CBCentralManager(delegate: self, queue: nil)
-            myCentral.delegate = self
-            myPeripheralManager = CBPeripheralManager(delegate: self, queue: nil)
+        
+        super.init()
+        self.myCentral = CBCentralManager(delegate: self, queue: nil)
+        self.myCentral.delegate = self
+        self.myPeripheralManager = CBPeripheralManager(delegate: self, queue: nil)
+        
     }
     
-    // MARK: Code for Peripheral Manager
-    func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
-        print("peripheralManagerDidUpdateState \(peripheral.state.rawValue)")
-                
-            if myPeripheralManager.state == .poweredOn {
-                self.myService = CBMutableService(type: peripheralServiceUUID, primary: true)
+    //--------------------------------------------------------------------------------------------------------------------
+    // MARK: Central Manager
+    // Function that checks state of Central Device (bluetooth on = .powerOn)
+    func centralManagerDidUpdateState(_ central: CBCentralManager) {
+        
+        // if true then make global var true
+        if central.state == .poweredOn {
+            self.isSwitchedOn = true
+        }
+        else {
+            self.isSwitchedOn = false
+        }
+        self.isConnected = isConnected // IS this true ??
+        
+    }
+    
+    // Function that discovers peripherals and adds them to the scannedPeripherals array
+    func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
+        
+        // If RSSI bigger than - 100 than it is considered too far away for a successful connection
+        guard RSSI.intValue >= -100
+                else {
+                    print("Discovered perhiperal not in expected range, at %d", RSSI.intValue)
+                    return
+        }
+         
+        // unwrap name of peripheral from advertisement data
+        var peripheralName: String!
+        if let name = advertisementData[CBAdvertisementDataLocalNameKey] as? String {
+            peripheralName = name
+        }
+        else {
+            peripheralName = "Unknown"
+        }
+       
+        // get peripheral scanned
+        let newPeripheral = Peripheral(id: scannedPeripherals.count, peripheral: peripheral, name: peripheralName, rssi: RSSI.intValue)
+        print(newPeripheral)
+        
+        var temp = [Peripheral]()
+        temp.append(newPeripheral)
+        print(temp)
+        
+        // check if temp and peripherals contain the same or have changed
+        var hasChanged = false
+        
+        // if they dont have the same number of entries then something has definitely changed
+        if temp.count != scannedPeripherals.count{
+            hasChanged = true
+            
+        // double checking something has changed even if same number of entries
+        } else{
+            if temp.count != 0 {
+                for i in 0...temp.count - 1 {
+                    if temp[i] == scannedPeripherals[i] {
+                        hasChanged = true
+                    }
+                }
             }
-    }
+            
+        }
+        
+        if hasChanged {
+            scannedPeripherals = temp
+            print("changed")
+        }
+        // restart temp
+        temp = []
     
-    func peripheralManager(_ peripheral: CBPeripheralManager, didAdd service: CBService, error: Error?) {
-         if let error = error {
-            print("Add service failed: \(error.localizedDescription)")
+    }
+    func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
+        // Successfully connected. Store reference to peripheral if not already done.
+        print("\n\nCentral connected\n\n")
+        myPeripheral.discoverServices([peripheralServiceUUID]) // look for what we want to look for specifically
+        
+    }
+    func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
+        // Handle error
+        print("failed to connect")
+
+    }
+    func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
+        if let error = error {
+            // Handle error
+            print("Error disconnecting")
             return
         }
-        print("Add service succeeded")
+        // Successfully disconnected
     }
     
+    //--------------------------------------------------------------------------------------------------------------------
+    // MARK: Peripheral Manager
+    // Function that checks if bluetooth is on and if so creates the service for the peripheral
+    func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
+        
+        // print updating state
+        print("peripheralManagerDidUpdateState \(peripheral.state.rawValue)")
+                
+        // if bluetooth on then create service
+        if self.myPeripheralManager.state == .poweredOn {
+            self.myService = CBMutableService(type: peripheralServiceUUID, primary: true)
+        }
+        
+    }
+    
+    // Function that adds services and characteristeristics to myPeripheral
     func addServicesAndCharacteristics() {
+        
+        //create read characteristic
         let readCharData = "READ"
-
-        let readChar = CBMutableCharacteristic.init(type: readCharacteristicUUID, properties: [.read], value: readCharData.data(using: .utf8), permissions: [.readable])
-        let notifyChar = CBMutableCharacteristic.init(type: notifyCharacteristicUUID, properties: [.read,.notify,.write], value:nil, permissions: [.readable,.writeable])
+        let readChar = CBMutableCharacteristic.init(type: self.readCharacteristicUUID, properties: [.read], value: readCharData.data(using: .utf8), permissions: [.readable])
+        
+        // create notification characteristic
+        let notifyChar = CBMutableCharacteristic.init(type: self.notifyCharacteristicUUID, properties: [.read,.notify,.write], value:nil, permissions: [.readable,.writeable])
+        
+        // add characteristics to service
         self.myService?.characteristics = []
         self.myService?.characteristics?.append(readChar)
         self.myService?.characteristics?.append(notifyChar)
-        self.myPeripheralManager.add(myService!)
-        print(myService)
         
+        // add service to peripheral manager
+        self.myPeripheralManager.add(self.myService!)
+        
+        print(self.myService) // delete
     }
+    
+    // Function that checks if the myservice has been added correctly
+    func peripheralManager(_ peripheral: CBPeripheralManager, didAdd service: CBService, error: Error?) {
+        
+        // Handle error if service doesn't work
+        if let error = error {
+            print("Add service failed: \(error.localizedDescription)")
+            return
+        }
+        // Print in terminal if it works
+        print("Add service succeeded")
+    }
+    
+    
     
     func startAdvertising() {
         /*
@@ -118,77 +236,11 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     }
     
     // MARK: Code forCentral Manager
-    // Function that checks if bluetooth is on
-    func centralManagerDidUpdateState(_ central: CBCentralManager) {
-        if central.state == .poweredOn {
-            isSwitchedOn = true
-        }
-        else {
-            isSwitchedOn = false
-        }
-        self.isConnected = isConnected
-        
-    }
     
-    func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
-        
-        guard RSSI.intValue >= -100
-                else {
-                    print("Discovered perhiperal not in expected range, at %d", RSSI.intValue)
-                    return
-        }
-         
-        var peripheralName: String!
-       
-        if let name = advertisementData[CBAdvertisementDataLocalNameKey] as? String {
-            peripheralName = name
-        }
-        else {
-            peripheralName = "Unknown"
-        }
-       
-        let newPeripheral = Peripheral(id: peripherals.count, peripheral: peripheral, name: peripheralName, rssi: RSSI.intValue)
-        print(newPeripheral)
-        
-        // tempPeripherals constantly updates
-        var temp = [Peripheral]()
-        
-        // if not in array then append
-        temp.append(newPeripheral)
-        
-        print(temp)
-        
-        // check if temp and peripherals contain the same or have changed
-        var hasChanged = false
-        
-        // if they dont have the same number of entries then something has definitely changed
-        if temp.count != peripherals.count{
-            hasChanged = true
-            
-        // double checking something has changed even if same number of entries
-        } else{
-            if temp.count != 0 {
-                for i in 0...temp.count - 1 {
-                    if temp[i] == peripherals[i] {
-                        hasChanged = true
-                    }
-                }
-            }
-            
-        }
-        
-        if hasChanged {
-            peripherals = temp
-            print("changed")
-        }
-        // restart temp
-        temp = []
-    
-    }
         
     func startScanning() {
         print("Scanning...")
-        peripherals = []
+        scannedPeripherals = []
         myCentral.scanForPeripherals(withServices: [peripheralServiceUUID], options: nil)
             /* DispatchQueue.main.asyncAfter(deadline: .now() + 10.0) {
                 self.startScanning()
@@ -198,16 +250,10 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     func stopScanning() {
         print("stopScanning")
         myCentral.stopScan()
-        peripherals = []
+        scannedPeripherals = []
     }
     
     // MARK: Connect to Peripheral
-    func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
-        // Successfully connected. Store reference to peripheral if not already done.
-        print("\n\nCentral connected\n\n")
-        myPeripheral.discoverServices([peripheralServiceUUID]) // look for what we want to look for specifically
-        
-    }
     
     func connect(peripheral: CBPeripheral) {
         print(peripheral)
@@ -217,25 +263,14 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         myCentral.stopScan()
         self.myPeripheral.delegate = self
      }
-    func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
-        // Handle error
-        print("failed to connect")
 
-    }
     
     
     func disconnect(peripheral: CBPeripheral) {
         myCentral.cancelPeripheralConnection(peripheral)
     }
     
-    func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
-        if let error = error {
-            // Handle error
-            print("Error disconnecting")
-            return
-        }
-        // Successfully disconnected
-    }
+    
     
  
     // Call after connecting to peripheral
