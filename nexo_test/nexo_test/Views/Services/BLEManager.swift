@@ -169,12 +169,6 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         
         // print updating state
         print("peripheralManagerDidUpdateState \(peripheral.state.rawValue)")
-                
-        // if bluetooth on then create service
-        if self.myPeripheralManager.state == .poweredOn {
-            self.myService = CBMutableService(type: peripheralServiceUUID, primary: true)
-        }
-        
     }
     
     // Function that notifies developer if peripheral has started advertising
@@ -185,6 +179,9 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     // Should this be somewhere else ??
     // Function that adds services and characteristeristics to myPeripheral
     func addServicesAndCharacteristics() {
+        
+        // Initialize service
+        self.myService = CBMutableService(type: peripheralServiceUUID, primary: true)
         
         //create read characteristic
         let readCharData = "READ"
@@ -290,22 +287,24 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         print("Connecting started...")
     }
     
-    /* DISCOVERING */
+    /* DISCOVERING // WE DONT USE THIS
     // Am I using these ?? comment and test
     // Call after connecting to peripheral
     func discoverServices(peripheral: CBPeripheral) {
+        print("Func discover Services")
         peripheral.discoverServices([peripheralServiceUUID])
     }
      
-    // Call after discovering services
+    // Call after discovering services we never call this ??
     func discoverCharacteristics(peripheral: CBPeripheral) {
+        print("Func discover Chars")
         guard let services = peripheral.services else {
             return
         }
         for service in services {
-            peripheral.discoverCharacteristics(nil, for: service)
+            peripheral.discoverCharacteristics([notifyCharacteristicUUID, readCharacteristicUUID], for: service)
         }
-    }
+    }*/
 }
 
 
@@ -316,13 +315,18 @@ extension BLEManager: CBPeripheralDelegate {
     
     // Function that discover the services in the peripheral
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
+        if let error = error {
+            print("Error discovering services: %s", error.localizedDescription)
+            return
+        }
         
+        
+        // Loop through the newly filled peripheral.services array, just in case there's more than one.
+        guard let peripheralServices = peripheral.services else { return }
         print("Discovering services...")
-        print(peripheral.services ?? "No Services")
-        
-        // Once services discovered we call for function to discover their characteristics
-        for service in myPeripheral.services! {
-            peripheral.discoverCharacteristics([notifyCharacteristicUUID], for: service)
+
+        for service in peripheralServices {
+            peripheral.discoverCharacteristics([notifyCharacteristicUUID, readCharacteristicUUID], for: service)
         }
     }
     
