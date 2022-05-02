@@ -40,6 +40,8 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     let peripheralServiceUUID = CBUUID(string: "00001011-0000-1100-1000-00123456789A")
     let notifyCharacteristicUUID = CBUUID(string: "00001012-0000-1100-1000-00123456789A")
     let readCharacteristicUUID = CBUUID(string: "00001012-0000-1100-1000-00123456790A")
+    let pairCharacteristicUUID = CBUUID(string: "00001012-0000-1100-1000-00123456791A")
+
 
     // service and peripheral
     var myService: CBMutableService! // Beter name ??
@@ -53,6 +55,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     @Published var isSwitchedOn = false
     @Published var isConnected = false
     @Published var keepScanning = true // ??
+    @Published var isNotifying = false
     
     // array of peripherals found
     @Published var scannedPeripherals = [Peripheral]()
@@ -173,6 +176,21 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         
         // print updating state
         print("peripheralManagerDidUpdateState \(peripheral.state.rawValue)")
+        
+        // Check if notify service is notifying
+        // Loop through the newly filled peripheral.services array, just in case there's more than one.
+        guard let peripheralServices = myPeripheral.services else { return }
+        
+        print("Checking Subscriptions...")
+        
+        // loop through services even though right now only one
+        for service in peripheralServices {
+            
+            if let chars = service.characteristics { // Unwrapping optional
+                for characteristic in chars {
+                    if characteristic.isNotifying {
+                        isNotifying = true
+        }}}}
     }
     
     // Function that notifies developer if peripheral has started advertising
@@ -188,11 +206,14 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         self.myService = CBMutableService(type: peripheralServiceUUID, primary: true)
         
         //create read characteristic
-        let readCharData = "READ"
+        let readCharData = "READ" // Characteristics with cached values must be read-only
         let readChar = CBMutableCharacteristic.init(type: self.readCharacteristicUUID, properties: [.read], value: readCharData.data(using: .utf8), permissions: [.readable])
         
         // create notification characteristic
         let notifyChar = CBMutableCharacteristic.init(type: self.notifyCharacteristicUUID, properties: [.notify,.write], value:nil, permissions: [.readable,.writeable])
+        
+        // create pairing characteristic
+        let pairChar = CBMutableCharacteristic.init(type: self.notifyCharacteristicUUID, properties: [.notify,.write], value:nil, permissions: [.readable,.writeable]) // Do I need all these properties/permisions ??
         
         // add characteristics to service
         self.myService?.characteristics = []
@@ -324,7 +345,6 @@ extension BLEManager: CBPeripheralDelegate {
             return
         }
         
-        
         // Loop through the newly filled peripheral.services array, just in case there's more than one.
         guard let peripheralServices = peripheral.services else { return }
         print("Discovering services...")
@@ -356,9 +376,18 @@ extension BLEManager: CBPeripheralDelegate {
                     print("\(characteristic.uuid): properties contains .read")
                     peripheral.readValue(for: characteristic)
                 }
-                if characteristic.properties.contains(.notify) {
+                // Pairing Notification
+                if characteristic.properties.contains(.notify) && characteristic.uuid == pairCharacteristicUUID{
                     print("\(characteristic.uuid): properties contains .notify")
+                    
+                    // We are now subscribed to characteristics
                     peripheral.setNotifyValue(true, for: characteristic)
+                    
+                    // Write pairing code
+                    let value = Int.random(in: 1000...9999)
+                    print("Value: \(value)")
+                    let data = withUnsafeBytes(of: value) { Data($0) }
+                    peripheral.writeValue(data, for: characteristic, type: .withResponse)
                 }
             }
         }
@@ -385,12 +414,35 @@ extension BLEManager: CBPeripheralDelegate {
                       let stringFromData = String(data: characteristicData, encoding: .utf8) else { return }
                 self.myNotifyData = characteristicData
                 self.myNotifyString = stringFromData
+            
+            // If pair characteristic
+            case notifyCharacteristicUUID:
+                print(characteristic.value ?? "No value")
+                guard let characteristicData = characteristic.value,
+                let stringFromData = String(data: characteristicData, encoding: .utf8) else { return }
 
             // If other type of characteristic
             default:
               print("Unhandled Characteristic UUID: \(characteristic.uuid)")
         }
     }
+    
+    // Function that handles errors if subscribtion or unsubscribtion has errors
+    func peripheral(_ peripheral: CBPeripheral, didUpdateNotificationStateFor characteristic: CBCharacteristic, error: Error?) {
+        if let error = error {
+            print("Error subscribing to characteristics: %s", error.localizedDescription)
+            return
+        }
+    }
+    
+    // Peripheral Pairing Notif??
+    func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
+        if let error = error {
+            print("Error getting write Notification: %s", error.localizedDescription)
+            return
+        }
+    }
+    
     // TODO: CLEAN CODE BELOW
     /*
      *   This callback lets us know more data has arrived via notification on the characteristic
@@ -459,3 +511,5 @@ extension BLEManager: CBPeripheralDelegate {
      */
     
 }
+
+

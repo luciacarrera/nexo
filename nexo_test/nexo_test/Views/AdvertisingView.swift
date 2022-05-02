@@ -11,12 +11,17 @@ struct AdvertisingView: View {
     
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var bleManager: BLEManager
+    @State private var navigate = false
 
     var body: some View {
         NavigationView{
-            VStack{
-                Text("Advertising")
-                
+            ZStack {
+                NavigationLink(destination: PeripheralView().navigationBarBackButtonHidden(true), isActive: $navigate){
+                }
+            
+                VStack{
+                    Text("Advertising")
+                }
             }
             
         }.navigationBarItems(leading:

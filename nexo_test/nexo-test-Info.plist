@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string></string>
+	<string>App communicates using CoreBluetooth</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string></string>
 	<key>UIBackgroundModes</key>
