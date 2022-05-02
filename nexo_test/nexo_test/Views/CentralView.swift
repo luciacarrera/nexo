@@ -13,6 +13,7 @@ struct CentralView: View {
 
     var body: some View {
         VStack{
+            Spacer()
             Text("Trying to connect")
             if bleManager.isConnected {
                 Text("Connected").foregroundColor(.green)
@@ -21,6 +22,7 @@ struct CentralView: View {
             }
             Spacer()
             Text(bleManager.myReadString)
+            Spacer()
         }
     }
 }

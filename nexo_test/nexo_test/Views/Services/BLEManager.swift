@@ -46,6 +46,8 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     var myPeripheral: CBPeripheral!  // Beter name ??
     var myReadData = Data() // Necessary ??
     var myReadString: String = "Unknown"// Necessary ??
+    var myNotifyData = Data() // Necessary ??
+    var myNotifyString: String = "Unknown"// Necessary ??
     
     // status of bluetooth in device
     @Published var isSwitchedOn = false
@@ -356,18 +358,15 @@ extension BLEManager: CBPeripheralDelegate {
                 }
                 if characteristic.properties.contains(.notify) {
                     print("\(characteristic.uuid): properties contains .notify")
+                    peripheral.setNotifyValue(true, for: characteristic)
                 }
-
-                /* ..UUID ||
-                 characteristic.uuid == heartRateCharacteristicUUID ||
-                 characteristic.uuid == runningSpeedCharacteristicUUID */
             }
         }
     }
     
     // Function to check update value of a specific characteristic
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
-      
+        
         // Handles type of characteristic
         switch characteristic.uuid {
             
@@ -379,6 +378,14 @@ extension BLEManager: CBPeripheralDelegate {
                 self.myReadData.append(characteristicData)
                 self.myReadString = stringFromData
             
+            // If notify characteristic
+            case notifyCharacteristicUUID:
+                print(characteristic.value ?? "No value")
+                guard let characteristicData = characteristic.value,
+                      let stringFromData = String(data: characteristicData, encoding: .utf8) else { return }
+                self.myNotifyData = characteristicData
+                self.myNotifyString = stringFromData
+
             // If other type of characteristic
             default:
               print("Unhandled Characteristic UUID: \(characteristic.uuid)")
