@@ -16,7 +16,7 @@ struct AdvertisingView: View {
     var body: some View {
         NavigationView{
             ZStack {
-                NavigationLink(destination: PeripheralView().navigationBarBackButtonHidden(true), isActive: $navigate){
+                NavigationLink(destination: PeripheralView().navigationBarBackButtonHidden(true), isActive: $bleManager.isNotifying){
                 }
             
                 VStack{
