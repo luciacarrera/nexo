@@ -59,7 +59,8 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     @Published var isConnected = false
     @Published var keepScanning = true // ??
     @Published var isNotifying = false
-    
+    @Published var pairValue = 0
+
     // array of peripherals found
     @Published var scannedPeripherals = [Peripheral]()
     
