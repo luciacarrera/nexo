@@ -52,7 +52,7 @@ struct ConnectionView: View {
                 .alert("Please turn on Bluetooth", isPresented: $showAlert){
                     Button("OK", role: .cancel) { }
                 }
-            }
+            } // End of ZStack
         }
         .environmentObject(bleManager)
     }

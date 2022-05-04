@@ -58,7 +58,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     @Published var isSwitchedOn = false
     @Published var isConnected = false
     @Published var keepScanning = true // ??
-    @Published var isNotifying = false
+    @Published var isPairing = false
     @Published var pairValue = 0
 
     // array of peripherals found
@@ -182,21 +182,6 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         // print updating state
         print("peripheralManagerDidUpdateState \(peripheral.state.rawValue)")
         
-        // Check if notify service is notifying
-        // Loop through the newly filled peripheral.services array, just in case there's more than one.
-        if self.myPeripheral != nil {
-            if let peripheralServices = self.myPeripheral.services {
-            
-                print("Checking Subscriptions...")
-                
-                // loop through services even though right now only one
-                for service in peripheralServices {
-                    
-                    if let chars = service.characteristics { // Unwrapping optional
-                        for characteristic in chars {
-                            if characteristic.isNotifying {
-                                isNotifying = true
-                            }}}}}}
     }
     
     // Function that notifies developer if peripheral has started advertising
@@ -233,8 +218,8 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         
         // add service to peripheral manager
         self.myPeripheralManager.add(self.myService!) // DOES THIS WORK ??
-        
         print(self.myService ?? "No Service in Peripheral") // delete
+        checkPairing()
     }
     
     // Function that checks if the myservice has been added correctly

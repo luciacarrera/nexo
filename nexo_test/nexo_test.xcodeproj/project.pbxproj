@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9EA655B52821D28300D3B821 /* TextAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EA655B42821D28300D3B821 /* TextAlert.swift */; };
 		9EAA22C02819E6CB005E1B95 /* nexo_testApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAA22BF2819E6CB005E1B95 /* nexo_testApp.swift */; };
 		9EAA22C42819E6CC005E1B95 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9EAA22C32819E6CC005E1B95 /* Assets.xcassets */; };
 		9EAA22C72819E6CC005E1B95 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9EAA22C62819E6CC005E1B95 /* Preview Assets.xcassets */; };
@@ -36,6 +37,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9EA655B42821D28300D3B821 /* TextAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextAlert.swift; sourceTree = "<group>"; };
 		9EAA22BC2819E6CB005E1B95 /* nexo_test.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = nexo_test.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9EAA22BF2819E6CB005E1B95 /* nexo_testApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = nexo_testApp.swift; sourceTree = "<group>"; };
 		9EAA22C32819E6CC005E1B95 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -76,6 +78,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9EA655B32821D26C00D3B821 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				9EA655B42821D28300D3B821 /* TextAlert.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		9EAA22B32819E6CB005E1B95 = {
 			isa = PBXGroup;
 			children = (
@@ -99,6 +109,8 @@
 			children = (
 				9EAA22FD2819F2D8005E1B95 /* nexo-test-Info.plist */,
 				9EAA22F52819E8BA005E1B95 /* Views */,
+				9EAA22F22819E882005E1B95 /* Services */,
+				9EA655B32821D26C00D3B821 /* Models */,
 				9EAA22C52819E6CC005E1B95 /* Preview Content */,
 				9EAA22BF2819E6CB005E1B95 /* nexo_testApp.swift */,
 				9EAA22C32819E6CC005E1B95 /* Assets.xcassets */,
@@ -130,7 +142,6 @@
 				9EAA22F02819E7EA005E1B95 /* ScanningView.swift */,
 				9EAA22F72819EBDA005E1B95 /* CentralView.swift */,
 				9EAA2300281A0BE6005E1B95 /* PeripheralView.swift */,
-				9EAA22F22819E882005E1B95 /* Services */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -272,6 +283,7 @@
 				9EAA22F12819E7EA005E1B95 /* ScanningView.swift in Sources */,
 				9EAA2301281A0BE6005E1B95 /* PeripheralView.swift in Sources */,
 				9EAA22C02819E6CB005E1B95 /* nexo_testApp.swift in Sources */,
+				9EA655B52821D28300D3B821 /* TextAlert.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

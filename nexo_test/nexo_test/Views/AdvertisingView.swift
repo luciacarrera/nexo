@@ -15,16 +15,26 @@ struct AdvertisingView: View {
 
     var body: some View {
         NavigationView{
-            ZStack {
-                NavigationLink(destination: PeripheralView().navigationBarBackButtonHidden(true), isActive: $bleManager.isNotifying){
-                }
-            
+            ZStack{
+                NavigationLink(destination: PeripheralView().navigationBarBackButtonHidden(true), isActive: $navigate){
+                } // Navigation Link
                 VStack{
                     Text("Advertising")
-                }
-            }
+                    
+                    if bleManager.isPairing {
+                        Text("Paired").foregroundColor(.green)
+                    } else{
+                        Text("Not Paired").foregroundColor(.red)
+                    }
+                } // Vstack
+                
+                .alert(isPresented: $bleManager.isPairing, TextAlert(title: "Title", action: {
+                            print("Callback \($0 ?? "")")
+                        })) // Alert
+            } // ZStack
             
-        }.navigationBarItems(leading:
+        } // Navigation View
+        .navigationBarItems(leading:
             Button(action: {
                 bleManager.stopAdvertising()
               self.presentationMode.wrappedValue.dismiss()
@@ -32,17 +42,19 @@ struct AdvertisingView: View {
               HStack {
                 Image(systemName: "arrow.left")
                 Text("Back")
-              }
-          })
+              } // End of HStack
+          }) // NavBarItem
         .onAppear() {
             bleManager.startAdvertising()
-        }
+        } // On Appear
         
-    }
-}
+    } // body
+} // view
 
 struct AdvertisingView_Previews: PreviewProvider {
     static var previews: some View {
         AdvertisingView()
     }
 }
+
+//--------------------------------------------

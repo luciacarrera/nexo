@@ -37,7 +37,7 @@ struct ScanningView: View {
                     
                             }
                         }
-                    }
+                    } // End of ZStack
             
     
             .alert(item: $selectedDevice) { show in
@@ -51,7 +51,7 @@ struct ScanningView: View {
                     secondaryButton: .cancel()
                 )
             }
-        }
+        } // End of Navigation View
         .navigationBarItems(leading:
             Button(action: {
                 print("\n\n\n\n\n")
@@ -67,11 +67,9 @@ struct ScanningView: View {
         .onAppear {
             bleManager.startScanning()
         }
-
-            
         
-    }
-}
+    } // End of body
+} // End of View
 
 struct ScanningView_Previews: PreviewProvider {
     static var previews: some View {
