@@ -62,11 +62,11 @@ struct ScanningView: View {
                 Image(systemName: "arrow.left")
                 Text("Back")
               }
-          })
+          }) // Nav bar items
                         
         .onAppear {
             bleManager.startScanning()
-        }
+        } // on appear
         
     } // End of body
 } // End of View

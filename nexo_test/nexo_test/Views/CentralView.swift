@@ -10,7 +10,7 @@ import SwiftUI
 struct CentralView: View {
 
     @EnvironmentObject var bleManager: BLEManager
-    @State private var showAlert = true
+    @State private var showAlert = false
 
     var body: some View {
         ZStack {
@@ -27,13 +27,17 @@ struct CentralView: View {
                 Spacer()
             } // Vstack
             .alert(isPresented: $showAlert) {
-                Alert(title: Text("Pairing Code:"), message: Text(bleManager.pairValue), dismissButton: .default(Text("Got it!")))
+                Alert(title: Text(bleManager.pairValue), message: Text("This is your pairing code"), dismissButton: .default(Text("Got it!")))
             }
             
         } // Zstack
+        .onAppear() {
+            showAlert.toggle()
+            print(showAlert)
+        } // onAppear
         
-    }
-}
+    } // body
+} // view
 
 struct CentralView_Previews: PreviewProvider {
     static var previews: some View {

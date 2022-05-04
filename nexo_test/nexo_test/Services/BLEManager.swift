@@ -421,7 +421,7 @@ extension BLEManager: CBPeripheralDelegate {
                     
                     // Write pairing code
                     let value = String(Int.random(in: 1000...9999))
-                    
+                    self.pairValue = value
                     // ask for a response
                     peripheral.writeValue(value.data(using: .utf8)!, for: characteristic, type: .withResponse)
                     print("written pair value")
