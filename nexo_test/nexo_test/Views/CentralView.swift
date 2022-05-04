@@ -10,20 +10,28 @@ import SwiftUI
 struct CentralView: View {
 
     @EnvironmentObject var bleManager: BLEManager
+    @State private var showAlert = true
 
     var body: some View {
-        VStack{
-            Spacer()
-            Text("Trying to connect")
-            if bleManager.isConnected {
-                Text("Connected").foregroundColor(.green)
-            } else{
-                Text("Disconnected").foregroundColor(.red)
+        ZStack {
+            VStack{
+                Spacer()
+                Text("Trying to connect")
+                if bleManager.isConnected {
+                    Text("Connected").foregroundColor(.green)
+                } else{
+                    Text("Disconnected").foregroundColor(.red)
+                }
+                Spacer()
+                Text(bleManager.myReadString)
+                Spacer()
+            } // Vstack
+            .alert(isPresented: $showAlert) {
+                Alert(title: Text("Pairing Code:"), message: Text(bleManager.pairValue), dismissButton: .default(Text("Got it!")))
             }
-            Spacer()
-            Text(bleManager.myReadString)
-            Spacer()
-        }
+            
+        } // Zstack
+        
     }
 }
 

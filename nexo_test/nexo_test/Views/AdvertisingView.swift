@@ -25,7 +25,16 @@ struct AdvertisingView: View {
                 } // Vstack
                 
                 .alert(isPresented: $bleManager.isPairing, TextAlert(title: "Insert Pairing Code:", action: {
-                            print("Callback \($0 ?? "")")
+                    var input = $0 ?? "Canceled"
+                    print(input)
+                    // Check if correct input
+                    if input == bleManager.pairValue {
+                        input = "Paired"
+                        navigate = true
+                    } else {
+                        input = "Wrong password"
+                    }
+                    self.bleManager.pairValue = input
                     
                         })) // Alert
             } // ZStack
