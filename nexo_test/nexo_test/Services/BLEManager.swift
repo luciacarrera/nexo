@@ -174,7 +174,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     
     //--------------------------------------------------------------------------------------------------------------------
     // MARK: Peripheral Manager
-    // Functions that control the Peripheral Manager
+    // Functions that control the Peripheral Device
     
     // Function that checks if bluetooth is on and if so creates the service for the peripheral
     func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
@@ -219,7 +219,6 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         // add service to peripheral manager
         self.myPeripheralManager.add(self.myService!) // DOES THIS WORK ??
         print(self.myService ?? "No Service in Peripheral") // delete
-        checkPairing()
     }
     
     // Function that checks if the myservice has been added correctly
@@ -232,6 +231,11 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         }
         // Print in terminal if it works
         print("Add service succeeded")
+    }
+    func peripheralManager(_ peripheral: CBPeripheralManager, central: CBCentral, didSubscribeTo characteristic: CBCharacteristic) {
+        if characteristic.uuid == pairCharacteristicUUID {
+            self.isPairing = true
+        }
     }
     
     //--------------------------------------------------------------------------------------------------------------------
@@ -331,7 +335,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
 
 //------------------------------------------------------------------------------------------------------------------------
 // MARK: Peripheral Delegate
-// Extension for the Peripheral Delegate
+// Functions that control the management of the peripheral IN the Central Device
 extension BLEManager: CBPeripheralDelegate {
     
     // Function that discover the services in the peripheral
@@ -401,6 +405,7 @@ extension BLEManager: CBPeripheralDelegate {
             print("Error getting write Notification: %s", error.localizedDescription)
             return
         }
+        
         /* if characteristic.uuid == notifyCharacteristicUUID {
             
         } */
@@ -446,6 +451,7 @@ extension BLEManager: CBPeripheralDelegate {
             print("Error subscribing to characteristics: %s", error.localizedDescription)
             return
         }
+        
     }
     
     // Function if service is modified ??

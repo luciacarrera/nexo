@@ -12,6 +12,7 @@ struct AdvertisingView: View {
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var bleManager: BLEManager
     @State private var navigate = false
+    
 
     var body: some View {
         NavigationView{
@@ -21,15 +22,11 @@ struct AdvertisingView: View {
                 VStack{
                     Text("Advertising")
                     
-                    if bleManager.isPairing {
-                        Text("Paired").foregroundColor(.green)
-                    } else{
-                        Text("Not Paired").foregroundColor(.red)
-                    }
                 } // Vstack
                 
-                .alert(isPresented: $bleManager.isPairing, TextAlert(title: "Title", action: {
+                .alert(isPresented: $bleManager.isPairing, TextAlert(title: "Insert Pairing Code:", action: {
                             print("Callback \($0 ?? "")")
+                    
                         })) // Alert
             } // ZStack
             

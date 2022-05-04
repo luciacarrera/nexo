@@ -10,7 +10,10 @@ import UIKit
 extension UIAlertController {
     convenience init(alert: TextAlert) {
         self.init(title: alert.title, message: nil, preferredStyle: .alert)
-        addTextField { $0.placeholder = alert.placeholder }
+        addTextField {
+            $0.placeholder = alert.placeholder
+            $0.keyboardType = .numberPad
+        }
         addAction(UIAlertAction(title: alert.cancel, style: .cancel) { _ in
             alert.action(nil)
         })
@@ -20,7 +23,6 @@ extension UIAlertController {
         })
     }
 }
-
 
 
 struct AlertWrapper<Content: View>: UIViewControllerRepresentable {
@@ -69,6 +71,7 @@ public struct TextAlert {
     public var accept: String = "OK"
     public var cancel: String = "Cancel"
     public var action: (String?) -> ()
+    public var keyboardType: UIKeyboardType = .default // Keyboard tzpe of the TextField
 }
 
 extension View {
