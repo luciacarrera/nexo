@@ -64,5 +64,3 @@ struct AdvertisingView_Previews: PreviewProvider {
         AdvertisingView()
     }
 }
-
-//--------------------------------------------

@@ -43,7 +43,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     let notifyCharacteristicUUID = CBUUID(string: "00001012-0000-1100-1000-00123456789A")
     let readCharacteristicUUID = CBUUID(string: "00001012-0000-1100-1000-00123456750A")
     let sendCodeCharacteristicUUID = CBUUID(string: "00001012-0000-1100-1000-00123456691A")
-    let pairResultCharacteristicUUID = CBUUID(string: "00001012-0000-1100-1000-00123456691A")
+    let pairResultCharacteristicUUID = CBUUID(string: "00001012-0000-1100-1000-00123456692A")
     var charsUUIDs: [CBUUID] = []
 
 
@@ -401,11 +401,11 @@ extension BLEManager: CBPeripheralDelegate {
         if let chars = service.characteristics {
             for characteristic in chars {
                 
-                if characteristic.properties.contains(.read) {
+                /*if characteristic.properties.contains(.read) {
                     print("\(characteristic.uuid): properties contains .read")
                     peripheral.readValue(for: characteristic)
-                }
-                if characteristic.properties.contains(.read)  && characteristic.uuid == pairResultCharacteristicUUID{
+                }*/
+                if characteristic.uuid == pairResultCharacteristicUUID {
                     print("\(characteristic.uuid): properties contains .read")
                     peripheral.readValue(for: characteristic)
                     // We are now subscribed to characteristics
@@ -414,7 +414,7 @@ extension BLEManager: CBPeripheralDelegate {
                     print("reading pair result")
                 }
                 // Pairing Notification
-                if characteristic.properties.contains(.notify) && characteristic.uuid == sendCodeCharacteristicUUID{
+                if characteristic.uuid == sendCodeCharacteristicUUID{
                     print("\(characteristic.uuid): properties contains .notify")
                     
                     // We are now subscribed to characteristics
@@ -432,7 +432,7 @@ extension BLEManager: CBPeripheralDelegate {
                         print(mystr)
 
                     }
-                    print("written pair value")
+                    print("written send code")
                 }
             }
         }
@@ -491,6 +491,8 @@ extension BLEManager: CBPeripheralDelegate {
                       let byte = characteristicData.first else { return }
                 if byte == 1 {
                     self.disconnect(peripheral: peripheral)
+                } else {
+                    print("send code correct success")
                 }
 
             // If other type of characteristic
