@@ -42,7 +42,8 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     
     let notifyCharacteristicUUID = CBUUID(string: "00001012-0000-1100-1000-00123456789A")
     let readCharacteristicUUID = CBUUID(string: "00001012-0000-1100-1000-00123456750A")
-    let pairCharacteristicUUID = CBUUID(string: "00001012-0000-1100-1000-00123456691A")
+    let sendCodeCharacteristicUUID = CBUUID(string: "00001012-0000-1100-1000-00123456691A")
+    let pairResultCharacteristicUUID = CBUUID(string: "00001012-0000-1100-1000-00123456691A")
     var charsUUIDs: [CBUUID] = []
 
 
@@ -60,8 +61,8 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     @Published var keepScanning = true // ??
     @Published var isPairing = false
     @Published var pairValue = "Waiting"
-    @Published var isDisconnected = false // NOT the opposite of isConnected but kind of, will tell view to go back
-
+    @Published var isDisconnected = false// NOT the opposite of isConnected but kind of, will tell view to go back
+    @Published var pairSuccesful = -1
 
     // array of peripherals found
     @Published var scannedPeripherals = [Peripheral]()
@@ -92,6 +93,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
             self.isSwitchedOn = false
         }
         self.isConnected = isConnected // IS this true ??
+        
         
     }
     
@@ -166,6 +168,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     
     // Handles error if Central doesn't succesfully disconnect to Peripheral
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
+        self.isDisconnected = true
         
         if error != nil {
             // Handle error
@@ -206,17 +209,20 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         let notifyChar = CBMutableCharacteristic.init(type: self.notifyCharacteristicUUID, properties: [.notify,.write], value:nil, permissions: [.readable,.writeable])
         
         // create pairing characteristic
-        let pairChar = CBMutableCharacteristic.init(type: self.pairCharacteristicUUID, properties: [.notify,.write], value:nil, permissions: [.readable,.writeable]) // Do I need all these properties/permisions ??
+        let sendCodeChar = CBMutableCharacteristic.init(type: self.sendCodeCharacteristicUUID, properties: [.notify,.write], value:nil, permissions: [.readable,.writeable]) // Do I need all these properties/permisions ??
+        
+        //
+        let pairResultChar = CBMutableCharacteristic.init(type: self.pairResultCharacteristicUUID, properties: [.read, .notify], value: nil, permissions: [.readable])
         
         // safekeeping of all chars uuids added
-        self.charsUUIDs = [pairCharacteristicUUID, notifyCharacteristicUUID, readCharacteristicUUID]
+        self.charsUUIDs = [sendCodeCharacteristicUUID, notifyCharacteristicUUID, readCharacteristicUUID, pairResultCharacteristicUUID]
         
         // add characteristics to service
         self.myService?.characteristics = []
         self.myService?.characteristics?.append(readChar)
-        self.myService?.characteristics?.append(pairChar)
+        self.myService?.characteristics?.append(sendCodeChar)
         self.myService?.characteristics?.append(notifyChar)
-        
+        self.myService?.characteristics?.append(pairResultChar)
         
         // add service to peripheral manager
         self.myPeripheralManager.add(self.myService!) // DOES THIS WORK ??
@@ -241,37 +247,42 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     
     // Handles write requests
     func peripheralManager(_ peripheral: CBPeripheralManager, didReceiveWrite requests: [CBATTRequest]) {
-        print("Received Request...")
+        print("Received Write Request...")
         
         // Go through all requests
         for request in requests {
             
             // For pairing Request
-            if request.characteristic.uuid == pairCharacteristicUUID{
+            if request.characteristic.uuid == sendCodeCharacteristicUUID{
                 
                 if let receivedValue = request.value { // unwrapping
-                    
                     // get pairValue
-                    self.pairValue =  String(decoding: receivedValue , as: UTF8.self)
+                    self.pairValue =  String(data: receivedValue, encoding: .utf8) ?? "Waiting"
                     print(pairValue)
-                    
-                    // Tell peripheral device it is pairing
                     self.isPairing = true
                     
-                    if self.pairValue != "Waiting" || self.pairValue != "Paired"{
-                        let response = self.pairValue.data(using: .utf8)
-                        request.value = response
-                        peripheral.respond(to: request, withResult: .unlikelyError)
-                    }
-                    if self.pairValue == "Paired" {
-                        let response = self.pairValue.data(using: .utf8)
-                        request.value = response
-                        peripheral.respond(to: request, withResult: .success)
-                    }
+                    // Tell central we received pairing value
+                    peripheral.respond(to: request, withResult: .success)
                 }
             }
         }
     }
+    func peripheralManager(_ peripheral: CBPeripheralManager, didReceiveRead request: CBATTRequest) {
+        print("Received Read Request...")
+        if request.characteristic.uuid == pairResultCharacteristicUUID {
+            if self.pairSuccesful != -1 {
+                request.value = Data(bytes: &pairSuccesful, count: MemoryLayout.size(ofValue: pairSuccesful))
+                peripheral.respond(to: request, withResult: .success)
+            }
+        }
+    }
+    
+    // I dont think I use this
+    func peripheralManagerIsReady(toUpdateSubscribers peripheral: CBPeripheralManager) {
+            print("ready")
+    }
+    
+
     //--------------------------------------------------------------------------------------------------------------------
     // MARK: View Functions
     // Functions called by the views to access the Bluetooth Managers
@@ -345,34 +356,18 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         myCentral.cancelPeripheralConnection(peripheral)
         print("Disconnecting started...")
         self.isDisconnected = true
+        self.isConnected = false
     }
     
-    /* DISCOVERING // WE DONT USE THIS
-    // Am I using these ?? comment and test
-    // Call after connecting to peripheral
-    func discoverServices(peripheral: CBPeripheral) {
-        print("Func discover Services")
-        peripheral.discoverServices([peripheralServiceUUID])
-    }
-     
-    // Call after discovering services we never call this ??
-    func discoverCharacteristics(peripheral: CBPeripheral) {
-        print("Func discover Chars")
-        guard let services = peripheral.services else {
-            return
-        }
-        for service in services {
-            peripheral.discoverCharacteristics([notifyCharacteristicUUID, readCharacteristicUUID], for: service)
-        }
-    }*/
+   
 }
 
-
+    
 //------------------------------------------------------------------------------------------------------------------------
 // MARK: Peripheral Delegate
 // Functions that control the management of the peripheral IN the Central Device
 extension BLEManager: CBPeripheralDelegate {
-    
+        
     // Function that discover the services in the peripheral
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         if let error = error {
@@ -405,15 +400,21 @@ extension BLEManager: CBPeripheralDelegate {
         // Unwrap characteristics
         if let chars = service.characteristics {
             for characteristic in chars {
-                /*if characteristic.uuid == readCharacteristicUUID || characteristic.uuid == notifyCharacteristicUUID {
-                    peripheral.setNotifyValue(true, for: characteristic) // subscribes to characteristic?
-                }*/
+                
                 if characteristic.properties.contains(.read) {
                     print("\(characteristic.uuid): properties contains .read")
                     peripheral.readValue(for: characteristic)
                 }
+                if characteristic.properties.contains(.read)  && characteristic.uuid == pairResultCharacteristicUUID{
+                    print("\(characteristic.uuid): properties contains .read")
+                    peripheral.readValue(for: characteristic)
+                    // We are now subscribed to characteristics
+                    peripheral.setNotifyValue(true, for: characteristic)
+                    peripheral.readValue(for: characteristic)
+                    print("reading pair result")
+                }
                 // Pairing Notification
-                if characteristic.properties.contains(.notify) && characteristic.uuid == pairCharacteristicUUID{
+                if characteristic.properties.contains(.notify) && characteristic.uuid == sendCodeCharacteristicUUID{
                     print("\(characteristic.uuid): properties contains .notify")
                     
                     // We are now subscribed to characteristics
@@ -422,8 +423,15 @@ extension BLEManager: CBPeripheralDelegate {
                     // Write pairing code
                     let value = String(Int.random(in: 1000...9999))
                     self.pairValue = value
+                    print(pairValue)
+                    let data = value.data(using: .utf8)
                     // ask for a response
                     peripheral.writeValue(value.data(using: .utf8)!, for: characteristic, type: .withResponse)
+                    if let mydata = data {
+                        let mystr = String(data: mydata, encoding: .utf8)!
+                        print(mystr)
+
+                    }
                     print("written pair value")
                 }
             }
@@ -433,7 +441,7 @@ extension BLEManager: CBPeripheralDelegate {
     // Function to check pairing
     func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
         
-        if characteristic.uuid == pairCharacteristicUUID {
+        if characteristic.uuid == sendCodeCharacteristicUUID {
             if let error = error {
                 disconnect(peripheral: peripheral)
                 print("Error getting write Notification: %s", error.localizedDescription)
@@ -470,11 +478,20 @@ extension BLEManager: CBPeripheralDelegate {
                 self.myNotifyData = characteristicData
                 self.myNotifyString = stringFromData
             
-            // If pair characteristic
-            case notifyCharacteristicUUID:
+            // If send code characteristic characteristic
+            case sendCodeCharacteristicUUID:
                 print(characteristic.value ?? "No value")
                 guard let characteristicData = characteristic.value,
                 let stringFromData = String(data: characteristicData, encoding: .utf8) else { return }
+            
+            // If pair result characteristic
+            case pairResultCharacteristicUUID:
+                print(characteristic.value ?? "Waiting")
+                guard let characteristicData = characteristic.value,
+                      let byte = characteristicData.first else { return }
+                if byte == 1 {
+                    self.disconnect(peripheral: peripheral)
+                }
 
             // If other type of characteristic
             default:

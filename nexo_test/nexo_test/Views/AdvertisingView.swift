@@ -19,22 +19,24 @@ struct AdvertisingView: View {
             ZStack{
                 NavigationLink(destination: PeripheralView().navigationBarBackButtonHidden(true), isActive: $navigate){
                 } // Navigation Link
+                
                 VStack{
                     Text("Advertising")
                     
                 } // Vstack
                 
                 .alert(isPresented: $bleManager.isPairing, TextAlert(title: "Insert Pairing Code:", action: {
-                    var input = $0 ?? "Canceled"
-                    print(input)
+                    let input = $0 ?? "Canceled"
                     // Check if correct input
+                    print("Input: \(input)\nPair value: \(bleManager.pairValue)")
                     if input == bleManager.pairValue {
-                        input = "Paired"
+                        print("Correct")
+                        bleManager.pairSuccesful = 0
                         navigate = true
                     } else {
-                        input = "Wrong password"
+                        bleManager.pairSuccesful = 1
+                        self.presentationMode.wrappedValue.dismiss()
                     }
-                    self.bleManager.pairValue = input
                     
                         })) // Alert
             } // ZStack

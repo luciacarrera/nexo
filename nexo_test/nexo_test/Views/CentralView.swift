@@ -8,11 +8,15 @@
 import SwiftUI
 
 struct CentralView: View {
-
+    
+    @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var bleManager: BLEManager
     @State private var showAlert = false
+    @Environment(\.dismiss) var dismiss
 
+    @ViewBuilder
     var body: some View {
+        
         ZStack {
             VStack{
                 Spacer()
