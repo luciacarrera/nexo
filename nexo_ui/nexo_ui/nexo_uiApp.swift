@@ -11,7 +11,7 @@ import SwiftUI
 struct nexo_uiApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ConnectionView2()
         }
     }
 }

@@ -8,17 +8,23 @@
 
 /* Begin PBXBuildFile section */
 		9E3439142832AA2C0012174D /* nexo_uiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3439132832AA2C0012174D /* nexo_uiApp.swift */; };
-		9E3439162832AA2C0012174D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3439152832AA2C0012174D /* ContentView.swift */; };
+		9E3439162832AA2C0012174D /* ConnectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3439152832AA2C0012174D /* ConnectionView.swift */; };
 		9E3439182832AA2D0012174D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E3439172832AA2D0012174D /* Assets.xcassets */; };
 		9E34391B2832AA2D0012174D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E34391A2832AA2D0012174D /* Preview Assets.xcassets */; };
+		9E3439222832B15E0012174D /* ConnectionView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3439212832B15E0012174D /* ConnectionView2.swift */; };
+		9E3439242832B8DC0012174D /* customButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3439232832B8DC0012174D /* customButton.swift */; };
+		9E3439272832C2280012174D /* Rubik-VariableFont_wght.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9E3439262832C2280012174D /* Rubik-VariableFont_wght.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		9E3439102832AA2C0012174D /* nexo_ui.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = nexo_ui.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E3439132832AA2C0012174D /* nexo_uiApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = nexo_uiApp.swift; sourceTree = "<group>"; };
-		9E3439152832AA2C0012174D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		9E3439152832AA2C0012174D /* ConnectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionView.swift; sourceTree = "<group>"; };
 		9E3439172832AA2D0012174D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9E34391A2832AA2D0012174D /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		9E3439212832B15E0012174D /* ConnectionView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionView2.swift; sourceTree = "<group>"; };
+		9E3439232832B8DC0012174D /* customButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = customButton.swift; sourceTree = "<group>"; };
+		9E3439262832C2280012174D /* Rubik-VariableFont_wght.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Rubik-VariableFont_wght.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,8 +57,10 @@
 		9E3439122832AA2C0012174D /* nexo_ui */ = {
 			isa = PBXGroup;
 			children = (
+				9E3439252832C2040012174D /* Style */,
 				9E3439132832AA2C0012174D /* nexo_uiApp.swift */,
-				9E3439152832AA2C0012174D /* ContentView.swift */,
+				9E3439152832AA2C0012174D /* ConnectionView.swift */,
+				9E3439212832B15E0012174D /* ConnectionView2.swift */,
 				9E3439172832AA2D0012174D /* Assets.xcassets */,
 				9E3439192832AA2D0012174D /* Preview Content */,
 			);
@@ -65,6 +73,15 @@
 				9E34391A2832AA2D0012174D /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		9E3439252832C2040012174D /* Style */ = {
+			isa = PBXGroup;
+			children = (
+				9E3439262832C2280012174D /* Rubik-VariableFont_wght.ttf */,
+				9E3439232832B8DC0012174D /* customButton.swift */,
+			);
+			path = Style;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -125,6 +142,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9E3439272832C2280012174D /* Rubik-VariableFont_wght.ttf in Resources */,
 				9E34391B2832AA2D0012174D /* Preview Assets.xcassets in Resources */,
 				9E3439182832AA2D0012174D /* Assets.xcassets in Resources */,
 			);
@@ -137,7 +155,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9E3439162832AA2C0012174D /* ContentView.swift in Sources */,
+				9E3439242832B8DC0012174D /* customButton.swift in Sources */,
+				9E3439222832B15E0012174D /* ConnectionView2.swift in Sources */,
+				9E3439162832AA2C0012174D /* ConnectionView.swift in Sources */,
 				9E3439142832AA2C0012174D /* nexo_uiApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
