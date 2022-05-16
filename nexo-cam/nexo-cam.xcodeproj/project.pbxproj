@@ -15,9 +15,10 @@
 		9E3439A02832D6140012174D /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E34399F2832D6140012174D /* CameraView.swift */; };
 		9E3439A22832D6320012174D /* CameraErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3439A12832D6320012174D /* CameraErrorView.swift */; };
 		9E3439A42832D64D0012174D /* CameraControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3439A32832D64D0012174D /* CameraControlView.swift */; };
-		9E3439A62832D6780012174D /* ToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3439A52832D6780012174D /* ToggleButton.swift */; };
 		9E3439A82832D7B60012174D /* FrameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3439A72832D7B60012174D /* FrameView.swift */; };
 		9E3439AA2832D8FB0012174D /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3439A92832D8FB0012174D /* CameraManager.swift */; };
+		9E3439AD2832DCBD0012174D /* FrameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3439AC2832DCBD0012174D /* FrameManager.swift */; };
+		9E3439B02832DD490012174D /* CameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3439AF2832DD490012174D /* CameraViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,9 +31,10 @@
 		9E34399F2832D6140012174D /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
 		9E3439A12832D6320012174D /* CameraErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraErrorView.swift; sourceTree = "<group>"; };
 		9E3439A32832D64D0012174D /* CameraControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraControlView.swift; sourceTree = "<group>"; };
-		9E3439A52832D6780012174D /* ToggleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleButton.swift; sourceTree = "<group>"; };
 		9E3439A72832D7B60012174D /* FrameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameView.swift; sourceTree = "<group>"; };
 		9E3439A92832D8FB0012174D /* CameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
+		9E3439AC2832DCBD0012174D /* FrameManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameManager.swift; sourceTree = "<group>"; };
+		9E3439AF2832DD490012174D /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +67,7 @@
 		9E3439892832D54D0012174D /* nexo-cam */ = {
 			isa = PBXGroup;
 			children = (
+				9E3439AE2832DD320012174D /* ViewModels */,
 				9E34399E2832D5FB0012174D /* Views */,
 				9E34399B2832D5CB0012174D /* Extensions */,
 				9E3439982832D59D0012174D /* Camera */,
@@ -88,6 +91,7 @@
 			children = (
 				9E3439992832D5AC0012174D /* CameraError.swift */,
 				9E3439A92832D8FB0012174D /* CameraManager.swift */,
+				9E3439AC2832DCBD0012174D /* FrameManager.swift */,
 			);
 			path = Camera;
 			sourceTree = "<group>";
@@ -106,10 +110,17 @@
 				9E34399F2832D6140012174D /* CameraView.swift */,
 				9E3439A12832D6320012174D /* CameraErrorView.swift */,
 				9E3439A32832D64D0012174D /* CameraControlView.swift */,
-				9E3439A52832D6780012174D /* ToggleButton.swift */,
 				9E3439A72832D7B60012174D /* FrameView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		9E3439AE2832DD320012174D /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				9E3439AF2832DD490012174D /* CameraViewModel.swift */,
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -183,11 +194,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				9E3439A82832D7B60012174D /* FrameView.swift in Sources */,
-				9E3439A62832D6780012174D /* ToggleButton.swift in Sources */,
 				9E3439A22832D6320012174D /* CameraErrorView.swift in Sources */,
 				9E34398B2832D54D0012174D /* nexo_camApp.swift in Sources */,
 				9E34399A2832D5AC0012174D /* CameraError.swift in Sources */,
+				9E3439AD2832DCBD0012174D /* FrameManager.swift in Sources */,
 				9E3439A02832D6140012174D /* CameraView.swift in Sources */,
+				9E3439B02832DD490012174D /* CameraViewModel.swift in Sources */,
 				9E3439A42832D64D0012174D /* CameraControlView.swift in Sources */,
 				9E3439AA2832D8FB0012174D /* CameraManager.swift in Sources */,
 				9E34399D2832D5E00012174D /* CGImageExtension.swift in Sources */,
