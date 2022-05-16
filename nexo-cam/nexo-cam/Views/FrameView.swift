@@ -20,7 +20,7 @@ struct FrameView: View {
           GeometryReader { geometry in
               
             // Create Image from CGImage, scale it to fill the frame and clip it to the bounds. Here, you set the orientation to .upMirrored, because you’ll be using the front camera. If you wanted to use the back camera, this would need to be .up.
-            Image(image, scale: 1.0, orientation: .upMirrored, label: label)
+            Image(image, scale: 1.0, orientation: .up, label: label)
               .resizable()
               .scaledToFill()
               .frame(
