@@ -1,20 +1,21 @@
 //
 //  ContentView.swift
-//  nexo_camera
+//  nexo-cam
 //
 //  Created by Lucía on 5/16/22.
 //
 
 import SwiftUI
 
-struct CameraView: View {
+struct ContentView: View {
     var body: some View {
-        CameraController()
+        Text("Hello, world!")
+            .padding()
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        CameraView()
+        ContentView()
     }
 }

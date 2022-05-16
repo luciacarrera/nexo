@@ -7,24 +7,36 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9E3439352832CBC20012174D /* nexo_cameraApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3439342832CBC20012174D /* nexo_cameraApp.swift */; };
-		9E3439372832CBC20012174D /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3439362832CBC20012174D /* CameraView.swift */; };
-		9E3439392832CBCC0012174D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E3439382832CBCC0012174D /* Assets.xcassets */; };
-		9E34393C2832CBCC0012174D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E34393B2832CBCC0012174D /* Preview Assets.xcassets */; };
-		9E3439432832CCA30012174D /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3439422832CCA30012174D /* CameraController.swift */; };
+		9E34398B2832D54D0012174D /* nexo_camApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E34398A2832D54D0012174D /* nexo_camApp.swift */; };
+		9E34398F2832D54E0012174D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E34398E2832D54E0012174D /* Assets.xcassets */; };
+		9E3439922832D54E0012174D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E3439912832D54E0012174D /* Preview Assets.xcassets */; };
+		9E34399A2832D5AC0012174D /* CameraError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3439992832D5AC0012174D /* CameraError.swift */; };
+		9E34399D2832D5E00012174D /* CGImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E34399C2832D5E00012174D /* CGImageExtension.swift */; };
+		9E3439A02832D6140012174D /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E34399F2832D6140012174D /* CameraView.swift */; };
+		9E3439A22832D6320012174D /* CameraErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3439A12832D6320012174D /* CameraErrorView.swift */; };
+		9E3439A42832D64D0012174D /* CameraControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3439A32832D64D0012174D /* CameraControlView.swift */; };
+		9E3439A62832D6780012174D /* ToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3439A52832D6780012174D /* ToggleButton.swift */; };
+		9E3439A82832D7B60012174D /* FrameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3439A72832D7B60012174D /* FrameView.swift */; };
+		9E3439AA2832D8FB0012174D /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3439A92832D8FB0012174D /* CameraManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		9E3439312832CBC20012174D /* nexo_camera.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = nexo_camera.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		9E3439342832CBC20012174D /* nexo_cameraApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = nexo_cameraApp.swift; sourceTree = "<group>"; };
-		9E3439362832CBC20012174D /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
-		9E3439382832CBCC0012174D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		9E34393B2832CBCC0012174D /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		9E3439422832CCA30012174D /* CameraController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
+		9E3439872832D54D0012174D /* nexo-cam.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "nexo-cam.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9E34398A2832D54D0012174D /* nexo_camApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = nexo_camApp.swift; sourceTree = "<group>"; };
+		9E34398E2832D54E0012174D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		9E3439912832D54E0012174D /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		9E3439992832D5AC0012174D /* CameraError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraError.swift; sourceTree = "<group>"; };
+		9E34399C2832D5E00012174D /* CGImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGImageExtension.swift; sourceTree = "<group>"; };
+		9E34399F2832D6140012174D /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
+		9E3439A12832D6320012174D /* CameraErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraErrorView.swift; sourceTree = "<group>"; };
+		9E3439A32832D64D0012174D /* CameraControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraControlView.swift; sourceTree = "<group>"; };
+		9E3439A52832D6780012174D /* ToggleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleButton.swift; sourceTree = "<group>"; };
+		9E3439A72832D7B60012174D /* FrameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameView.swift; sourceTree = "<group>"; };
+		9E3439A92832D8FB0012174D /* CameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		9E34392E2832CBC20012174D /* Frameworks */ = {
+		9E3439842832D54D0012174D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -34,78 +46,108 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		9E3439282832CBC20012174D = {
+		9E34397E2832D54D0012174D = {
 			isa = PBXGroup;
 			children = (
-				9E3439332832CBC20012174D /* nexo_camera */,
-				9E3439322832CBC20012174D /* Products */,
+				9E3439892832D54D0012174D /* nexo-cam */,
+				9E3439882832D54D0012174D /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		9E3439322832CBC20012174D /* Products */ = {
+		9E3439882832D54D0012174D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				9E3439312832CBC20012174D /* nexo_camera.app */,
+				9E3439872832D54D0012174D /* nexo-cam.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		9E3439332832CBC20012174D /* nexo_camera */ = {
+		9E3439892832D54D0012174D /* nexo-cam */ = {
 			isa = PBXGroup;
 			children = (
-				9E3439342832CBC20012174D /* nexo_cameraApp.swift */,
-				9E3439362832CBC20012174D /* CameraView.swift */,
-				9E3439422832CCA30012174D /* CameraController.swift */,
-				9E3439382832CBCC0012174D /* Assets.xcassets */,
-				9E34393A2832CBCC0012174D /* Preview Content */,
+				9E34399E2832D5FB0012174D /* Views */,
+				9E34399B2832D5CB0012174D /* Extensions */,
+				9E3439982832D59D0012174D /* Camera */,
+				9E34398A2832D54D0012174D /* nexo_camApp.swift */,
+				9E34398E2832D54E0012174D /* Assets.xcassets */,
+				9E3439902832D54E0012174D /* Preview Content */,
 			);
-			path = nexo_camera;
+			path = "nexo-cam";
 			sourceTree = "<group>";
 		};
-		9E34393A2832CBCC0012174D /* Preview Content */ = {
+		9E3439902832D54E0012174D /* Preview Content */ = {
 			isa = PBXGroup;
 			children = (
-				9E34393B2832CBCC0012174D /* Preview Assets.xcassets */,
+				9E3439912832D54E0012174D /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		9E3439982832D59D0012174D /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				9E3439992832D5AC0012174D /* CameraError.swift */,
+				9E3439A92832D8FB0012174D /* CameraManager.swift */,
+			);
+			path = Camera;
+			sourceTree = "<group>";
+		};
+		9E34399B2832D5CB0012174D /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				9E34399C2832D5E00012174D /* CGImageExtension.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		9E34399E2832D5FB0012174D /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				9E34399F2832D6140012174D /* CameraView.swift */,
+				9E3439A12832D6320012174D /* CameraErrorView.swift */,
+				9E3439A32832D64D0012174D /* CameraControlView.swift */,
+				9E3439A52832D6780012174D /* ToggleButton.swift */,
+				9E3439A72832D7B60012174D /* FrameView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		9E3439302832CBC20012174D /* nexo_camera */ = {
+		9E3439862832D54D0012174D /* nexo-cam */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 9E34393F2832CBCC0012174D /* Build configuration list for PBXNativeTarget "nexo_camera" */;
+			buildConfigurationList = 9E3439952832D54E0012174D /* Build configuration list for PBXNativeTarget "nexo-cam" */;
 			buildPhases = (
-				9E34392D2832CBC20012174D /* Sources */,
-				9E34392E2832CBC20012174D /* Frameworks */,
-				9E34392F2832CBC20012174D /* Resources */,
+				9E3439832832D54D0012174D /* Sources */,
+				9E3439842832D54D0012174D /* Frameworks */,
+				9E3439852832D54D0012174D /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = nexo_camera;
-			productName = nexo_camera;
-			productReference = 9E3439312832CBC20012174D /* nexo_camera.app */;
+			name = "nexo-cam";
+			productName = "nexo-cam";
+			productReference = 9E3439872832D54D0012174D /* nexo-cam.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		9E3439292832CBC20012174D /* Project object */ = {
+		9E34397F2832D54D0012174D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1330;
 				LastUpgradeCheck = 1330;
 				TargetAttributes = {
-					9E3439302832CBC20012174D = {
+					9E3439862832D54D0012174D = {
 						CreatedOnToolsVersion = 13.3.1;
 					};
 				};
 			};
-			buildConfigurationList = 9E34392C2832CBC20012174D /* Build configuration list for PBXProject "nexo_camera" */;
+			buildConfigurationList = 9E3439822832D54D0012174D /* Build configuration list for PBXProject "nexo-cam" */;
 			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -113,43 +155,49 @@
 				en,
 				Base,
 			);
-			mainGroup = 9E3439282832CBC20012174D;
-			productRefGroup = 9E3439322832CBC20012174D /* Products */;
+			mainGroup = 9E34397E2832D54D0012174D;
+			productRefGroup = 9E3439882832D54D0012174D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				9E3439302832CBC20012174D /* nexo_camera */,
+				9E3439862832D54D0012174D /* nexo-cam */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		9E34392F2832CBC20012174D /* Resources */ = {
+		9E3439852832D54D0012174D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9E34393C2832CBCC0012174D /* Preview Assets.xcassets in Resources */,
-				9E3439392832CBCC0012174D /* Assets.xcassets in Resources */,
+				9E3439922832D54E0012174D /* Preview Assets.xcassets in Resources */,
+				9E34398F2832D54E0012174D /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		9E34392D2832CBC20012174D /* Sources */ = {
+		9E3439832832D54D0012174D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9E3439432832CCA30012174D /* CameraController.swift in Sources */,
-				9E3439372832CBC20012174D /* CameraView.swift in Sources */,
-				9E3439352832CBC20012174D /* nexo_cameraApp.swift in Sources */,
+				9E3439A82832D7B60012174D /* FrameView.swift in Sources */,
+				9E3439A62832D6780012174D /* ToggleButton.swift in Sources */,
+				9E3439A22832D6320012174D /* CameraErrorView.swift in Sources */,
+				9E34398B2832D54D0012174D /* nexo_camApp.swift in Sources */,
+				9E34399A2832D5AC0012174D /* CameraError.swift in Sources */,
+				9E3439A02832D6140012174D /* CameraView.swift in Sources */,
+				9E3439A42832D64D0012174D /* CameraControlView.swift in Sources */,
+				9E3439AA2832D8FB0012174D /* CameraManager.swift in Sources */,
+				9E34399D2832D5E00012174D /* CGImageExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		9E34393D2832CBCC0012174D /* Debug */ = {
+		9E3439932832D54E0012174D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -209,7 +257,7 @@
 			};
 			name = Debug;
 		};
-		9E34393E2832CBCC0012174D /* Release */ = {
+		9E3439942832D54E0012174D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -263,18 +311,18 @@
 			};
 			name = Release;
 		};
-		9E3439402832CBCC0012174D /* Debug */ = {
+		9E3439962832D54E0012174D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"nexo_camera/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"nexo-cam/Preview Content\"";
 				DEVELOPMENT_TEAM = 4M37P4SA8Z;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSCameraUsageDescription = "Camera is needed for taking pictures and videos.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "This app uses the camera to take pictures and videos.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -285,7 +333,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "luciacarrera.nexo-camera";
+				PRODUCT_BUNDLE_IDENTIFIER = "luciacarrera.nexo-cam";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -293,18 +341,18 @@
 			};
 			name = Debug;
 		};
-		9E3439412832CBCC0012174D /* Release */ = {
+		9E3439972832D54E0012174D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"nexo_camera/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"nexo-cam/Preview Content\"";
 				DEVELOPMENT_TEAM = 4M37P4SA8Z;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSCameraUsageDescription = "Camera is needed for taking pictures and videos.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "This app uses the camera to take pictures and videos.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -315,7 +363,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "luciacarrera.nexo-camera";
+				PRODUCT_BUNDLE_IDENTIFIER = "luciacarrera.nexo-cam";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -326,25 +374,25 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		9E34392C2832CBC20012174D /* Build configuration list for PBXProject "nexo_camera" */ = {
+		9E3439822832D54D0012174D /* Build configuration list for PBXProject "nexo-cam" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				9E34393D2832CBCC0012174D /* Debug */,
-				9E34393E2832CBCC0012174D /* Release */,
+				9E3439932832D54E0012174D /* Debug */,
+				9E3439942832D54E0012174D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		9E34393F2832CBCC0012174D /* Build configuration list for PBXNativeTarget "nexo_camera" */ = {
+		9E3439952832D54E0012174D /* Build configuration list for PBXNativeTarget "nexo-cam" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				9E3439402832CBCC0012174D /* Debug */,
-				9E3439412832CBCC0012174D /* Release */,
+				9E3439962832D54E0012174D /* Debug */,
+				9E3439972832D54E0012174D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 9E3439292832CBC20012174D /* Project object */;
+	rootObject = 9E34397F2832D54D0012174D /* Project object */;
 }
