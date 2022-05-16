@@ -24,30 +24,33 @@ struct ConnectionView: View {
             
                 VStack(alignment: .center){
                     Spacer()
-                
-                    // Link to scanning view
-                    // Check if bluetooth on if not alert
-                    Text("Act as Central").onTapGesture {
+                    Text("Choose your setting...")
+                        .padding(5)
+                        .font(.title2)
+                    
+                    Spacer().frame(height: 30)
+                    
+                    Button("Camera", action: {
                         if bleManager.isSwitchedOn {
                             navigate1.toggle()
                         } else {
                             showAlert.toggle()
                         }
-                    }.padding()
+                    }).buttonStyle(CustomButton(color1: Color.green, color2: Color.mint)) // End Button
                     
-                    Spacer()
-                
-                    // Link to scanning view
-                    // Check if bluetooth on if not alert
-                    Text("Act as Peripheral").onTapGesture {
+                    Spacer().frame(height: 30)
+                    
+                    Button("Viewfinder", action: {
                         if bleManager.isSwitchedOn {
                             navigate2.toggle()
                         } else {
                             showAlert.toggle()
                         }
-                    }.padding()
-
+                    }).buttonStyle(CustomButton(color1: Color.teal, color2: Color.blue)) // End Button
+                    
+                    
                     Spacer()
+            
                 }
                 .alert("Please turn on Bluetooth", isPresented: $showAlert){
                     Button("OK", role: .cancel) { }
