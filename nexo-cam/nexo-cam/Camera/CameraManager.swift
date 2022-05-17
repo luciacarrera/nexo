@@ -17,7 +17,7 @@ class CameraManager: ObservableObject {
     let session = AVCaptureSession()
 
     // A session queue, which you’ll use to change any of the camera configurations.
-    private let sessionQueue = DispatchQueue(label: "lucia.SessionQ")
+    private let sessionQueue = DispatchQueue(label: "nexo.SessionQ", qos: .userInitiated)
 
     // The video data output that will connect to AVCaptureSession. You’ll want this stored as a property so you can change the delegate after the session is configured
     private let videoOutput = AVCaptureVideoDataOutput()
@@ -93,6 +93,13 @@ class CameraManager: ObservableObject {
             return
         }
         session.beginConfiguration()
+        //session specific configuration
+        //before setting a session presets, we should check if the session supports it
+        if self.session.canSetSessionPreset(.photo) {
+            self.session.sessionPreset = .photo
+        }
+        self.session.automaticallyConfiguresCaptureDeviceForWideColor = true
+        
         defer {
             session.commitConfiguration()
         }

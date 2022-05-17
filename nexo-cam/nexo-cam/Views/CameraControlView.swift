@@ -31,18 +31,18 @@ struct CameraControlView: View {
         ZStack{
             Circle()
                 .stroke(Color.white,style: StrokeStyle(lineWidth: 5))
-                .frame(width: 70, height: 70)
+                .frame(width: 80, height: 80)
                 
                 
             Button(action: {
                 print("take pic")
             }, label: {
                 Circle()
-                    .frame(width: 60, height: 60)
+                    .frame(width: 70, height: 70)
                     .foregroundColor(.white)
                     .padding()
             }).buttonStyle(ScaleButtonStyle()) // End of button
-        } // End of ZStack
+        }.padding() // End of ZStack
         
     } // End of VStack
   } // End of body
