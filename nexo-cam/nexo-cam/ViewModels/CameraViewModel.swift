@@ -11,7 +11,7 @@ class CameraViewModel: ObservableObject {
     @Published var frame: CGImage?
     private let frameManager = FrameManager.shared
     @Published var error: Error?
-    private let cameraManager = CameraManager.shared
+    let cameraManager = CameraManager.shared
 
     init() {
     setupSubscriptions()

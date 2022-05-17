@@ -15,8 +15,11 @@ struct ScaleButtonStyle: ButtonStyle {
 }
 
 struct CameraControlView: View {
+    @EnvironmentObject var camera: CameraViewModel
 
   var body: some View {
+      let manager = camera.cameraManager
+
     VStack {
         HStack{
             Spacer()
@@ -28,6 +31,21 @@ struct CameraControlView: View {
         
         
       Spacer()
+        /*HStack{
+            Button(action: {
+                manager.toggleFlash()
+            }, label: {
+                if manager.flashMode == .off {
+                    Image(systemName: "bolt.slash").resizable()
+                        .frame(width: 30.0, height: 30.0)
+                        .foregroundColor(.white).padding()
+
+                }else {
+                    Image(systemName: "bolt").resizable()
+                        .frame(width: 30.0, height: 30.0)
+                        .foregroundColor(.white).padding()
+                }
+            })*/
         ZStack{
             Circle()
                 .stroke(Color.white,style: StrokeStyle(lineWidth: 5))
@@ -43,6 +61,10 @@ struct CameraControlView: View {
                     .padding()
             }).buttonStyle(ScaleButtonStyle()) // End of button
         }.padding() // End of ZStack
+           
+                   //Spacer()
+        //}// End of HStack for flash
+        
         
     } // End of VStack
   } // End of body

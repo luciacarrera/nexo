@@ -10,11 +10,14 @@ import AVFoundation
 // Created a class that conforms to ObservableObject to make it easier to use with future Combine code.
 class CameraManager: ObservableObject {
     
+    // MARK: Variables & Constants
     // An error to represent any camera-related error. You made it a published property so that other objects can subscribe to this stream and handle any errors as necessary.
     @Published var error: CameraError?
 
     // AVCaptureSession, which will coordinate sending the camera images to the appropriate data outputs.
     let session = AVCaptureSession()
+    var photoOutput = AVCapturePhotoOutput()
+    @Published var flashMode = AVCaptureDevice.FlashMode.off
 
     // A session queue, which you’ll use to change any of the camera configurations.
     private let sessionQueue = DispatchQueue(label: "nexo.SessionQ", qos: .userInitiated)
@@ -24,6 +27,7 @@ class CameraManager: ObservableObject {
 
     // The current status of the camera.
     private var status = Status.unconfigured
+    
 
 
     // Added an internal enumeration to represent the status of the camera.
@@ -37,6 +41,7 @@ class CameraManager: ObservableObject {
     // Included a static shared instance of the camera manager to make it easily accessible.
     static let shared = CameraManager()
 
+    // MARK: Initializers
     // Turned the camera manager into a singleton by making init private.
     private init() {
     configure()
@@ -45,8 +50,9 @@ class CameraManager: ObservableObject {
     private func configure() {
         checkPermissions()
         sessionQueue.async {
-          self.configureCaptureSession()
-          self.session.startRunning()
+            self.configureCaptureSession()
+            self.configurePhotoOutput()
+            self.session.startRunning()
         }
     } // end of configure
     
@@ -56,6 +62,8 @@ class CameraManager: ObservableObject {
       }
     } // End of set
     
+    
+    // MARK: Check Permissions
     private func checkPermissions() {
       // 1
         switch AVCaptureDevice.authorizationStatus(for: .video) {
@@ -88,6 +96,7 @@ class CameraManager: ObservableObject {
         
     } // End of checkpermissions
     
+    // MARK: Configure Session
     private func configureCaptureSession() {
         guard status == .unconfigured else {
             return
@@ -153,6 +162,7 @@ class CameraManager: ObservableObject {
 
     } // End of configureCaptureSession
     
+    // MARK: SET QUEUE
     func set(
       _ delegate: AVCaptureVideoDataOutputSampleBufferDelegate,
       queue: DispatchQueue
@@ -161,5 +171,38 @@ class CameraManager: ObservableObject {
         self.videoOutput.setSampleBufferDelegate(delegate, queue: queue)
       }
     } // End of set
+    
+    
+    // MARK: Take Photos
+    // function that configures photoOutput, telling it to use the JPEG file format for its video codec. Then, it adds photoOutput to captureSession. Finally, it starts captureSession.
+    func configurePhotoOutput(){
+        guard status != .configured else {
+            return
+        }
+        
+        self.photoOutput = AVCapturePhotoOutput()
+        self.photoOutput.setPreparedPhotoSettingsArray([AVCapturePhotoSettings(format: [AVVideoCodecKey : AVVideoCodecType.jpeg])], completionHandler: nil)
+     
+        if session.canAddOutput(self.photoOutput) { session.addOutput(self.photoOutput) }
+     
+        session.startRunning()
+    }
+    
+    func captureImage(){
+        
+    }
+
+    /*// MARK: Flash
+    func toggleFlash(){
+        if self.flashMode == AVCaptureDevice.FlashMode.on {
+                self.flashMode = AVCaptureDevice.FlashMode.off
+            }
+         
+            else {
+                self.flashMode = AVCaptureDevice.FlashMode.on
+            }
+    }*/
+    
+    
 }
 
