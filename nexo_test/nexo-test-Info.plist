@@ -6,6 +6,10 @@
 	<string>App communicates using CoreBluetooth</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string></string>
+	<key>NSCameraUsageDescription</key>
+	<string>App needs access to your camera to capture photo and video</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>App captures photos and saves them into your photo library</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>bluetooth-central</string>

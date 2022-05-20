@@ -36,7 +36,7 @@ struct ConnectionView: View {
                         } else {
                             showAlert.toggle()
                         }
-                    }).buttonStyle(CustomButton(color1: Color.green, color2: Color.mint)) // End Button
+                    }).buttonStyle(GradientBtn(color1: Color.green, color2: Color.mint)) // End Button
                     
                     Spacer().frame(height: 30)
                     
@@ -46,7 +46,7 @@ struct ConnectionView: View {
                         } else {
                             showAlert.toggle()
                         }
-                    }).buttonStyle(CustomButton(color1: Color.teal, color2: Color.blue)) // End Button
+                    }).buttonStyle(GradientBtn(color1: Color.teal, color2: Color.blue)) // End Button
                     
                     
                     Spacer()

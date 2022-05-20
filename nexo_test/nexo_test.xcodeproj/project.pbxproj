@@ -7,7 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9E3439B328330B750012174D /* customButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3439B228330B750012174D /* customButton.swift */; };
+		9E2B0A00283838EE0025E0E5 /* CameraModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2B09FF283838EE0025E0E5 /* CameraModel.swift */; };
+		9E2B0A02283839330025E0E5 /* CameraService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2B0A01283839330025E0E5 /* CameraService.swift */; };
+		9E2B0A04283839520025E0E5 /* CameraServiceEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2B0A03283839520025E0E5 /* CameraServiceEnums.swift */; };
+		9E2B0A06283839710025E0E5 /* CameraServiceExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2B0A05283839710025E0E5 /* CameraServiceExtensions.swift */; };
+		9E2B0A082838398A0025E0E5 /* ImageResizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2B0A072838398A0025E0E5 /* ImageResizer.swift */; };
+		9E2B0A0A283839A10025E0E5 /* PhotoCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2B0A09283839A10025E0E5 /* PhotoCapture.swift */; };
+		9E3439B328330B750012174D /* ButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3439B228330B750012174D /* ButtonStyles.swift */; };
 		9EA655B52821D28300D3B821 /* TextAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EA655B42821D28300D3B821 /* TextAlert.swift */; };
 		9EAA22C02819E6CB005E1B95 /* nexo_testApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAA22BF2819E6CB005E1B95 /* nexo_testApp.swift */; };
 		9EAA22C42819E6CC005E1B95 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9EAA22C32819E6CC005E1B95 /* Assets.xcassets */; };
@@ -38,7 +44,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		9E3439B228330B750012174D /* customButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = customButton.swift; sourceTree = "<group>"; };
+		9E2B09FF283838EE0025E0E5 /* CameraModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraModel.swift; sourceTree = "<group>"; };
+		9E2B0A01283839330025E0E5 /* CameraService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraService.swift; sourceTree = "<group>"; };
+		9E2B0A03283839520025E0E5 /* CameraServiceEnums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraServiceEnums.swift; sourceTree = "<group>"; };
+		9E2B0A05283839710025E0E5 /* CameraServiceExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraServiceExtensions.swift; sourceTree = "<group>"; };
+		9E2B0A072838398A0025E0E5 /* ImageResizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageResizer.swift; sourceTree = "<group>"; };
+		9E2B0A09283839A10025E0E5 /* PhotoCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCapture.swift; sourceTree = "<group>"; };
+		9E3439B228330B750012174D /* ButtonStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyles.swift; sourceTree = "<group>"; };
 		9EA655B42821D28300D3B821 /* TextAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextAlert.swift; sourceTree = "<group>"; };
 		9EAA22BC2819E6CB005E1B95 /* nexo_test.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = nexo_test.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9EAA22BF2819E6CB005E1B95 /* nexo_testApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = nexo_testApp.swift; sourceTree = "<group>"; };
@@ -80,18 +92,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		9E3439B128330B660012174D /* Style */ = {
+		9E2B0A0B2838582F0025E0E5 /* Viewmodels */ = {
 			isa = PBXGroup;
 			children = (
-				9E3439B228330B750012174D /* customButton.swift */,
 			);
-			path = Style;
+			path = Viewmodels;
 			sourceTree = "<group>";
 		};
 		9EA655B32821D26C00D3B821 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				9E3439B228330B750012174D /* ButtonStyles.swift */,
 				9EA655B42821D28300D3B821 /* TextAlert.swift */,
+				9E2B09FF283838EE0025E0E5 /* CameraModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -117,7 +130,7 @@
 		9EAA22BE2819E6CB005E1B95 /* nexo_test */ = {
 			isa = PBXGroup;
 			children = (
-				9E3439B128330B660012174D /* Style */,
+				9E2B0A0B2838582F0025E0E5 /* Viewmodels */,
 				9EAA22FD2819F2D8005E1B95 /* nexo-test-Info.plist */,
 				9EAA22F52819E8BA005E1B95 /* Views */,
 				9EAA22F22819E882005E1B95 /* Services */,
@@ -141,6 +154,11 @@
 			isa = PBXGroup;
 			children = (
 				9EAA22F32819E899005E1B95 /* BLEManager.swift */,
+				9E2B0A01283839330025E0E5 /* CameraService.swift */,
+				9E2B0A03283839520025E0E5 /* CameraServiceEnums.swift */,
+				9E2B0A05283839710025E0E5 /* CameraServiceExtensions.swift */,
+				9E2B0A072838398A0025E0E5 /* ImageResizer.swift */,
+				9E2B0A09283839A10025E0E5 /* PhotoCapture.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -287,15 +305,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9E2B0A02283839330025E0E5 /* CameraService.swift in Sources */,
 				9EAA22F82819EBDA005E1B95 /* CentralView.swift in Sources */,
+				9E2B0A0A283839A10025E0E5 /* PhotoCapture.swift in Sources */,
+				9E2B0A082838398A0025E0E5 /* ImageResizer.swift in Sources */,
 				9EAA22EF2819E733005E1B95 /* ConnectionView.swift in Sources */,
+				9E2B0A00283838EE0025E0E5 /* CameraModel.swift in Sources */,
 				9EAA22F42819E899005E1B95 /* BLEManager.swift in Sources */,
 				9EAA22FF2819F860005E1B95 /* AdvertisingView.swift in Sources */,
 				9EAA22F12819E7EA005E1B95 /* ScanningView.swift in Sources */,
 				9EAA2301281A0BE6005E1B95 /* PeripheralView.swift in Sources */,
 				9EAA22C02819E6CB005E1B95 /* nexo_testApp.swift in Sources */,
+				9E2B0A04283839520025E0E5 /* CameraServiceEnums.swift in Sources */,
+				9E2B0A06283839710025E0E5 /* CameraServiceExtensions.swift in Sources */,
 				9EA655B52821D28300D3B821 /* TextAlert.swift in Sources */,
-				9E3439B328330B750012174D /* customButton.swift in Sources */,
+				9E3439B328330B750012174D /* ButtonStyles.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

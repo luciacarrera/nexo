@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct CustomButton: ButtonStyle {
+struct GradientBtn: ButtonStyle {
     
     let color1: Color
     let color2: Color
@@ -28,6 +28,14 @@ struct CustomButton: ButtonStyle {
                 .font(.title2)
             
         } // End ZStack
+    }
+}
+
+// MARK: Scale Button Style
+struct ScaleBtn: ButtonStyle {
+    func makeBody(configuration: Self.Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.80 : 1)
     }
 }
 

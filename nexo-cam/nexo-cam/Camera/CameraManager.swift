@@ -16,19 +16,20 @@ class CameraManager: ObservableObject {
 
     // AVCaptureSession, which will coordinate sending the camera images to the appropriate data outputs.
     let session = AVCaptureSession()
-    var photoOutput = AVCapturePhotoOutput()
     @Published var flashMode = AVCaptureDevice.FlashMode.off
 
     // A session queue, which you’ll use to change any of the camera configurations.
     private let sessionQueue = DispatchQueue(label: "nexo.SessionQ", qos: .userInitiated)
 
     // The video data output that will connect to AVCaptureSession. You’ll want this stored as a property so you can change the delegate after the session is configured
-    private let videoOutput = AVCaptureVideoDataOutput()
+    //private let videoOutput = AVCaptureVideoDataOutput()
+    @Published var preview : AVCaptureVideoPreviewLayer!
+    @Published var output = AVCapturePhotoOutput()
+
 
     // The current status of the camera.
     private var status = Status.unconfigured
     
-
 
     // Added an internal enumeration to represent the status of the camera.
     enum Status {
@@ -143,14 +144,15 @@ class CameraManager: ObservableObject {
           return
         }
         
-        if session.canAddOutput(videoOutput) {
-          session.addOutput(videoOutput)
-          // 2
+        if session.canAddOutput(self.output) {
+            session.addOutput(self.output)
+            
+          /*
           videoOutput.videoSettings =
             [kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32BGRA]
           // 3
           let videoConnection = videoOutput.connection(with: .video)
-          videoConnection?.videoOrientation = .portrait
+          videoConnection?.videoOrientation = .portrait */
         } else {
           // 4
           set(error: .cannotAddOutput)
@@ -188,8 +190,8 @@ class CameraManager: ObservableObject {
         session.startRunning()
     }
     
-    func captureImage(){
-        
+    func takePic(){
+        self.output.capturePhoto(with: AVCapturePhotoSettings(), delegate: self)
     }
 
     /*// MARK: Flash
