@@ -27,6 +27,8 @@ final class CameraModel: ObservableObject {
     
     @Published var photosSaved = false
     
+    @Published var done = false
+    
     var alertError: AlertError!
     
     var session: AVCaptureSession
@@ -58,6 +60,7 @@ final class CameraModel: ObservableObject {
         service.$willCapturePhoto.sink { [weak self] (val) in
             self?.willCapturePhoto = val
         }.store(in: &self.subscriptions)
+        
         
         service.$photosSaved.sink { [weak self] (val) in
             self?.photosSaved = val

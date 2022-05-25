@@ -37,7 +37,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     var myCentral: CBCentralManager!
     var myPeripheralManager: CBPeripheralManager!
     var myCharacteristics: [CBCharacteristic]!
-    var connectedCentrals: [CBCentral]!
+    var connectedCentral: CBCentral!
     
     // UUID constants in our BLEManager class: one for the peripheral service and another for its characteristic.
     let peripheralServiceUUID = CBUUID(string: "00001011-0000-1100-1000-00123456789A")
@@ -47,8 +47,9 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     let sendCodeUUID = CBUUID(string: "00001012-0000-1100-1000-00123456691A")
     let pairResultUUID = CBUUID(string: "00001012-0000-1100-1000-00123456692A")
     var charsUUIDs: [CBUUID] = []
-
-
+    //var picIndex = 0
+    var ready = false
+    private let sessionQueue = DispatchQueue(label: "picture queue")
     // service and peripheral
     var myService: CBMutableService! // Beter name ??
     var myPeripheral: CBPeripheral!  // Beter name ??
@@ -68,6 +69,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     
     // Camera Model
     var camera: CameraModel?
+    var pictureData = Data()
     
     
     //--------------------------------------------------------------------------------------------------------------------
@@ -195,7 +197,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     // Function that notifies developer if peripheral has started advertising
     func peripheralManagerDidStartAdvertising(_ peripheral: CBPeripheralManager, error: Error?) {
         print("PERIPHERAL //Advertising started...")
-        self.connectedCentrals = []
+        self.connectedCentral = nil
     }
     
     // Should this be somewhere else ??
@@ -247,7 +249,13 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     
     // Handles subscribtions
     func peripheralManager(_ peripheral: CBPeripheralManager, central: CBCentral, didSubscribeTo characteristic: CBCharacteristic) {
-        self.connectedCentrals.append(central)
+        
+        // Only add if not already added
+        if self.connectedCentral == nil {
+            // check if already added
+            self.connectedCentral = central
+        }
+            
     }
     
     // Handles write requests
@@ -285,13 +293,12 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
                     // change value of click byte
                     if let cam = self.camera {
                         cam.capturePhoto()
-                        sendPhotoTaken()
+                        print("sending photo")
+                        self.sendPhotoTaken()
+        
                     }
+                    self.click = false
                     
-                    // reset value
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
-                        self.click = false
-                    }
                 }
             }
         }
@@ -312,48 +319,14 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     // I dont think I use this
     func peripheralManagerIsReady(toUpdateSubscribers peripheral: CBPeripheralManager) {
             print("PERIPHERAL // ready")
+        self.ready = true
     }
     
     /*func updateValue( _ value: Data, for characteristic: CBMutableCharacteristic, onSubscribedCentrals centrals: [CBCentral]?) -> Bool {
            return myPeripheralManager.updateValue(value, for: characteristic, onSubscribedCentrals: centrals)
        }*/
     
-    func sendPhotoTaken(){
-        // unwrap camera model just in case
-        if let cam = self.camera {
-            if cam.photo != nil { // unwrap photo just in case
-                // Search for pair result char
-                guard let chars = self.myService.characteristics else { return }
-                var myChar: CBMutableCharacteristic?
-                for char in chars {
-                    if char.uuid == picturesUUID {
-                        print("PERIPHERAL // sending photo")
-                        myChar = char as? CBMutableCharacteristic
-                        
-                        let buffer: [UInt8]
-                        buffer = Array(cam.photo.originalData)
-                        
-                        let biggerBuffer = createBufferToSend(buffer)
-             
-                        let imageSize = biggerBuffer.count
-                        // let imageProgress = -1
-             
-                        let start = "I:"+String(imageSize)
-                        
-                        myPeripheralManager.updateValue(start.data(using: .utf8)!, for: myChar!, onSubscribedCentrals: self.connectedCentrals)
-             
-                        biggerBuffer.forEach{ b in
-                        let data = NSData(bytes: b, length: MemoryLayout<UInt8>.size*b.count)
-                        
-                        myPeripheralManager.updateValue(data as Data, for: myChar!, onSubscribedCentrals: self.connectedCentrals)
-                        }
-                        
-                    }
-                }
-            }
-        }
-        
-    }
+    
 
     //--------------------------------------------------------------------------------------------------------------------
     // MARK: View Functions
@@ -459,7 +432,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
                 
                 // Update Value
                 let data = value.data(using: .utf8)
-                myPeripheralManager.updateValue(data!, for: myChar!, onSubscribedCentrals: self.connectedCentrals)
+                myPeripheralManager.updateValue(data!, for: myChar!, onSubscribedCentrals: nil)
             }
         }
     
@@ -498,26 +471,116 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     func configureCamera(camera: CameraModel){
         self.camera = camera
     }
-} //End of send photos
 
-    func createBufferToSend(_ buffer: [UInt8]) -> [[UInt8]] {
-        var bytesInArray = 0
-        var bufferIndex = 0
-        var biggerBuffer: [[UInt8]] = []
-        biggerBuffer.append([])
- 
-        buffer.forEach{b in
-            if(bytesInArray == 20) {
-                biggerBuffer.append([])
-                bufferIndex += 1
-                bytesInArray = 0
+
+    
+    func sendPhotoTaken(){
+        // unwrap camera model just in case
+        if let cam = self.camera {
+            if cam.photo != nil { // unwrap photo just in case
+                // Search for pair result char
+                guard let chars = self.myService.characteristics else { return }
+                var myChar: CBMutableCharacteristic?
+                for char in chars {
+                    if char.uuid == picturesUUID {
+                        
+                        myChar = char as? CBMutableCharacteristic
+                        // first we need to know how much data we have to send
+                        // Get the data
+                        let dataToSend = cam.photo.originalData
+                        
+                        // Reset the index
+                        var sendDataIndex = 0
+                        
+                        
+                        var didSend = true
+                        while didSend {
+                            // Work out how big it should be
+                            var amountToSend = dataToSend.count - sendDataIndex
+                            if let mtu = connectedCentral?.maximumUpdateValueLength {
+                                amountToSend = min(amountToSend, mtu)
+                            }
+                            
+                            // Copy out the data we want
+                            let chunk = dataToSend.subdata(in: sendDataIndex..<(sendDataIndex + amountToSend))
+                            
+                            // Send it if peripheral ready
+                            didSend = myPeripheralManager.updateValue(chunk, for: myChar!, onSubscribedCentrals: nil)
+                            
+                            // If it didn't work, drop out and wait for the callback
+                            if !didSend {
+                                print("failed to send")
+                                return
+                            }
+                            
+                            print("Sent bytes: ", chunk.count)
+                            
+                            // It did send, so update our index
+                            sendDataIndex += amountToSend
+                            
+                            if sendDataIndex >= dataToSend.count {
+                                // We have finished sending all the data
+                                
+                                //Send it
+                                let eomSent = myPeripheralManager.updateValue("EOM".data(using: .utf8)!,
+                                                                             for: myChar!, onSubscribedCentrals: nil)
+                                
+                                if eomSent {
+                                    // It sent; we're all done
+                                    print("Sent: EOM")
+                                }
+                                return
+                            }
+                        }
+                        
+                            
+                        /*print("PERIPHERAL // sending photo")
+                        myChar = char as? CBMutableCharacteristic
+                        
+                        
+                        let buffer: [UInt8]
+                        buffer = Array(cam.photo.originalData)
+                        
+                        let biggerBuffer = createBufferToSend(buffer)
+             
+                        let imageSize = biggerBuffer.count
+                        // let imageProgress = -1
+                        print("IMAGE SIZE: \(imageSize)")
+                        let start = "I:"+String(imageSize)
+                        
+                        // sends the size of the image
+                        myPeripheralManager.updateValue(start.data(using: .utf8)!, for: myChar!, onSubscribedCentrals: nil)
+                        
+                        // Now we actually send the data
+                        
+                        
+                        var index = 0
+                        // sends image bytes in packs
+                        biggerBuffer.forEach{ b in
+                        
+                            // creates the data pack - might be redundant
+                            let data = NSData(bytes: b, length: MemoryLayout<UInt8>.size*b.count)
+                            
+                                
+                            myPeripheralManager.updateValue(data as Data, for: myChar!, onSubscribedCentrals: self.connectedCentrals)
+                            
+                            print("PERIPHERAL // Sending packet \(index)")
+                            index += 1
+                            
+                        } // end of if loop*/
+                        
+                    } // end of if char uuid
+                } // end of for loop searching for char
+            } // end of unwrapping photo
+            else{
+                print("no photo yet")
             }
-            biggerBuffer[bufferIndex].append(b)
-            bytesInArray += 1
-        }
-        return biggerBuffer
-    }
+        } // end of unwrapping cam model
+        
+    } // end of send photo taken
 
+    
+} // end of class
     
 //------------------------------------------------------------------------------------------------------------------------
 // MARK: Peripheral Delegate
@@ -560,15 +623,15 @@ extension BLEManager: CBPeripheralDelegate {
                 
                 if characteristic.uuid == pairResultUUID {
                     print("\(characteristic.uuid): pair result characteristic with read and notify")
-                    peripheral.readValue(for: characteristic)
+
                     // We are now subscribed to characteristics
                     peripheral.setNotifyValue(true, for: characteristic)
                     peripheral.readValue(for: characteristic)
                     print("CENTRAL // reading pair result")
                 }
+                
                 if characteristic.uuid == picturesUUID {
                     print("\(characteristic.uuid): pictures characteristic with read and notify")
-                    peripheral.readValue(for: characteristic)
                     
                     // We are now subscribed to characteristics
                     peripheral.setNotifyValue(true, for: characteristic)
@@ -654,14 +717,41 @@ extension BLEManager: CBPeripheralDelegate {
             print("Pictures value:")
             print(characteristic.value ?? "no value")
             
-            guard let characteristicData = characteristic.value else { return }
+            // if nil then do not continue
+            guard let characteristicData = characteristic.value,
+            let stringFromData = String(data: characteristicData, encoding: .utf8) else { return }
+            print("string from data:\(stringFromData)")
+            
+            // if initial characteristic value sent then do not pass
+            if stringFromData != "" {
+                
+                if stringFromData == "EOM" {
+                    // End-of-message case: show the data.
+                    // Dispatch the text view update to the main queue for updating the UI, because
+                    // we don't know which thread this method will be called back on.
+                    DispatchQueue.main.async() {
+                        if let cam = self.camera {
+                            print("Saving Pictures")
+                            cam.savePhoto(photoData: characteristicData)
+                            self.noPicturesTaken = false
+                        }
+                    }
+                    
+                    
+                } else {
+                    // Otherwise, just append the data to what we have previously received.
+                    pictureData.append(characteristicData)
+                }
+            }
+            
+            /* guard let characteristicData = characteristic.value else { return }
             if let cam = self.camera {
                 print("Saving Pictures")
                 cam.savePhoto(photoData: characteristicData)
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
                     self.noPicturesTaken = false
                 }
-            }
+            } */
             
             
             // If other type of characteristic

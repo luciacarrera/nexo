@@ -81,6 +81,7 @@ public class CameraService {
     @Published public var isCameraButtonDisabled = true
     @Published public var isCameraUnavailable = true
     @Published public var photo: Photo?
+    @Published public var done = false
     
 
     // Alert properties
@@ -464,10 +465,11 @@ public class CameraService {
                     if let data = photoCaptureProcessor.photoData {
                         self?.photo = Photo(originalData: data)
                         print("passing photo")
+                        
                     } else {
                         print("No photo data")
+                        
                     }
-                    
                     self?.isCameraButtonDisabled = false
                     
                     self?.sessionQueue.async {
@@ -485,6 +487,7 @@ public class CameraService {
                 // The photo output holds a weak reference to the photo capture delegate and stores it in an array to maintain a strong reference.
                 self.inProgressPhotoCaptureDelegates[photoCaptureProcessor.requestedPhotoSettings.uniqueID] = photoCaptureProcessor
                 self.photoOutput.capturePhoto(with: photoSettings, delegate: photoCaptureProcessor)
+                
             }
         }
     }
