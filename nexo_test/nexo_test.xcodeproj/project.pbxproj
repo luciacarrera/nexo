@@ -13,17 +13,20 @@
 		9E2B0A06283839710025E0E5 /* CameraServiceExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2B0A05283839710025E0E5 /* CameraServiceExtensions.swift */; };
 		9E2B0A082838398A0025E0E5 /* ImageResizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2B0A072838398A0025E0E5 /* ImageResizer.swift */; };
 		9E2B0A0A283839A10025E0E5 /* PhotoCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2B0A09283839A10025E0E5 /* PhotoCapture.swift */; };
+		9E2B0A0D283AB0880025E0E5 /* CameraPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2B0A0C283AB0880025E0E5 /* CameraPreview.swift */; };
+		9E2B0A0F283C58430025E0E5 /* testing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2B0A0E283C58430025E0E5 /* testing.swift */; };
+		9E2B0A11283DA1020025E0E5 /* PhotoSave.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2B0A10283DA1020025E0E5 /* PhotoSave.swift */; };
 		9E3439B328330B750012174D /* ButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3439B228330B750012174D /* ButtonStyles.swift */; };
 		9EA655B52821D28300D3B821 /* TextAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EA655B42821D28300D3B821 /* TextAlert.swift */; };
 		9EAA22C02819E6CB005E1B95 /* nexo_testApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAA22BF2819E6CB005E1B95 /* nexo_testApp.swift */; };
 		9EAA22C42819E6CC005E1B95 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9EAA22C32819E6CC005E1B95 /* Assets.xcassets */; };
 		9EAA22C72819E6CC005E1B95 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9EAA22C62819E6CC005E1B95 /* Preview Assets.xcassets */; };
 		9EAA22EF2819E733005E1B95 /* ConnectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAA22EE2819E733005E1B95 /* ConnectionView.swift */; };
-		9EAA22F12819E7EA005E1B95 /* ScanningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAA22F02819E7EA005E1B95 /* ScanningView.swift */; };
+		9EAA22F12819E7EA005E1B95 /* CentralView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAA22F02819E7EA005E1B95 /* CentralView.swift */; };
 		9EAA22F42819E899005E1B95 /* BLEManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAA22F32819E899005E1B95 /* BLEManager.swift */; };
-		9EAA22F82819EBDA005E1B95 /* CentralView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAA22F72819EBDA005E1B95 /* CentralView.swift */; };
-		9EAA22FF2819F860005E1B95 /* AdvertisingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAA22FE2819F860005E1B95 /* AdvertisingView.swift */; };
-		9EAA2301281A0BE6005E1B95 /* PeripheralView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAA2300281A0BE6005E1B95 /* PeripheralView.swift */; };
+		9EAA22F82819EBDA005E1B95 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAA22F72819EBDA005E1B95 /* CameraView.swift */; };
+		9EAA22FF2819F860005E1B95 /* PeripheralView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAA22FE2819F860005E1B95 /* PeripheralView.swift */; };
+		9EAA2301281A0BE6005E1B95 /* ViewfinderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAA2300281A0BE6005E1B95 /* ViewfinderView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +53,9 @@
 		9E2B0A05283839710025E0E5 /* CameraServiceExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraServiceExtensions.swift; sourceTree = "<group>"; };
 		9E2B0A072838398A0025E0E5 /* ImageResizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageResizer.swift; sourceTree = "<group>"; };
 		9E2B0A09283839A10025E0E5 /* PhotoCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCapture.swift; sourceTree = "<group>"; };
+		9E2B0A0C283AB0880025E0E5 /* CameraPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreview.swift; sourceTree = "<group>"; };
+		9E2B0A0E283C58430025E0E5 /* testing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = testing.swift; sourceTree = "<group>"; };
+		9E2B0A10283DA1020025E0E5 /* PhotoSave.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSave.swift; sourceTree = "<group>"; };
 		9E3439B228330B750012174D /* ButtonStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyles.swift; sourceTree = "<group>"; };
 		9EA655B42821D28300D3B821 /* TextAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextAlert.swift; sourceTree = "<group>"; };
 		9EAA22BC2819E6CB005E1B95 /* nexo_test.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = nexo_test.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -59,12 +65,12 @@
 		9EAA22D12819E6CC005E1B95 /* nexo_testTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = nexo_testTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9EAA22DB2819E6CC005E1B95 /* nexo_testUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = nexo_testUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9EAA22EE2819E733005E1B95 /* ConnectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionView.swift; sourceTree = "<group>"; };
-		9EAA22F02819E7EA005E1B95 /* ScanningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanningView.swift; sourceTree = "<group>"; };
+		9EAA22F02819E7EA005E1B95 /* CentralView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CentralView.swift; sourceTree = "<group>"; };
 		9EAA22F32819E899005E1B95 /* BLEManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEManager.swift; sourceTree = "<group>"; };
-		9EAA22F72819EBDA005E1B95 /* CentralView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CentralView.swift; sourceTree = "<group>"; };
+		9EAA22F72819EBDA005E1B95 /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
 		9EAA22FD2819F2D8005E1B95 /* nexo-test-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "nexo-test-Info.plist"; sourceTree = SOURCE_ROOT; };
-		9EAA22FE2819F860005E1B95 /* AdvertisingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvertisingView.swift; sourceTree = "<group>"; };
-		9EAA2300281A0BE6005E1B95 /* PeripheralView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeripheralView.swift; sourceTree = "<group>"; };
+		9EAA22FE2819F860005E1B95 /* PeripheralView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeripheralView.swift; sourceTree = "<group>"; };
+		9EAA2300281A0BE6005E1B95 /* ViewfinderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewfinderView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,6 +152,7 @@
 			isa = PBXGroup;
 			children = (
 				9EAA22C62819E6CC005E1B95 /* Preview Assets.xcassets */,
+				9E2B0A0C283AB0880025E0E5 /* CameraPreview.swift */,
 			);
 			path = "Preview Content";
 			sourceTree = "<group>";
@@ -159,6 +166,7 @@
 				9E2B0A05283839710025E0E5 /* CameraServiceExtensions.swift */,
 				9E2B0A072838398A0025E0E5 /* ImageResizer.swift */,
 				9E2B0A09283839A10025E0E5 /* PhotoCapture.swift */,
+				9E2B0A10283DA1020025E0E5 /* PhotoSave.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -167,10 +175,11 @@
 			isa = PBXGroup;
 			children = (
 				9EAA22EE2819E733005E1B95 /* ConnectionView.swift */,
-				9EAA22FE2819F860005E1B95 /* AdvertisingView.swift */,
-				9EAA22F02819E7EA005E1B95 /* ScanningView.swift */,
-				9EAA22F72819EBDA005E1B95 /* CentralView.swift */,
-				9EAA2300281A0BE6005E1B95 /* PeripheralView.swift */,
+				9EAA22FE2819F860005E1B95 /* PeripheralView.swift */,
+				9EAA22F02819E7EA005E1B95 /* CentralView.swift */,
+				9EAA22F72819EBDA005E1B95 /* CameraView.swift */,
+				9EAA2300281A0BE6005E1B95 /* ViewfinderView.swift */,
+				9E2B0A0E283C58430025E0E5 /* testing.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -306,15 +315,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				9E2B0A02283839330025E0E5 /* CameraService.swift in Sources */,
-				9EAA22F82819EBDA005E1B95 /* CentralView.swift in Sources */,
+				9EAA22F82819EBDA005E1B95 /* CameraView.swift in Sources */,
 				9E2B0A0A283839A10025E0E5 /* PhotoCapture.swift in Sources */,
 				9E2B0A082838398A0025E0E5 /* ImageResizer.swift in Sources */,
 				9EAA22EF2819E733005E1B95 /* ConnectionView.swift in Sources */,
+				9E2B0A11283DA1020025E0E5 /* PhotoSave.swift in Sources */,
 				9E2B0A00283838EE0025E0E5 /* CameraModel.swift in Sources */,
 				9EAA22F42819E899005E1B95 /* BLEManager.swift in Sources */,
-				9EAA22FF2819F860005E1B95 /* AdvertisingView.swift in Sources */,
-				9EAA22F12819E7EA005E1B95 /* ScanningView.swift in Sources */,
-				9EAA2301281A0BE6005E1B95 /* PeripheralView.swift in Sources */,
+				9EAA22FF2819F860005E1B95 /* PeripheralView.swift in Sources */,
+				9EAA22F12819E7EA005E1B95 /* CentralView.swift in Sources */,
+				9E2B0A0D283AB0880025E0E5 /* CameraPreview.swift in Sources */,
+				9E2B0A0F283C58430025E0E5 /* testing.swift in Sources */,
+				9EAA2301281A0BE6005E1B95 /* ViewfinderView.swift in Sources */,
 				9EAA22C02819E6CB005E1B95 /* nexo_testApp.swift in Sources */,
 				9E2B0A04283839520025E0E5 /* CameraServiceEnums.swift in Sources */,
 				9E2B0A06283839710025E0E5 /* CameraServiceExtensions.swift in Sources */,

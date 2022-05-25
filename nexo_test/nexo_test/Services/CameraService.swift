@@ -70,6 +70,7 @@ public class CameraService {
     
     // MARK: Vars & Constants
     typealias PhotoCaptureSessionID = String
+    typealias PhotoSaveSessionID = String
 
     // These are the Observed Properties UI must react to
     @Published public var flashMode: AVCaptureDevice.FlashMode = .off
@@ -100,7 +101,10 @@ public class CameraService {
     
     // Capturing Photos Properties
     private let photoOutput = AVCapturePhotoOutput()
-    private var inProgressPhotoCaptureDelegates = [PhotoCaptureProcessor]()
+    private var inProgressPhotoCaptureDelegates = [Int64: PhotoCaptureProcessor]()
+    private var inProgressPhotoSaveDelegates = [Int64: PhotoSaveProcessor]()
+
+
     
     // KVO and Notifications Properties
     private var keyValueObservations = [NSKeyValueObservation]()
@@ -419,7 +423,8 @@ public class CameraService {
     public func capturePhoto() {
         if self.setupResult != .configurationFailed {
             self.isCameraButtonDisabled = true
-            sessionQueue.async { [self] in
+            
+            sessionQueue.async {
                 if let photoOutputConnection = self.photoOutput.connection(with: .video) {
                     photoOutputConnection.videoOrientation = .portrait
                 }
@@ -462,9 +467,12 @@ public class CameraService {
                     } else {
                         print("No photo data")
                     }
+                    
                     self?.isCameraButtonDisabled = false
                     
-                    
+                    self?.sessionQueue.async {
+                        self?.inProgressPhotoCaptureDelegates[photoCaptureProcessor.requestedPhotoSettings.uniqueID] = nil
+                    }
                 }, photoProcessingHandler: { [weak self] animate in
                     // Animates a spinner while photo is processing
                     if animate {
@@ -475,28 +483,62 @@ public class CameraService {
                 })
                 
                 // The photo output holds a weak reference to the photo capture delegate and stores it in an array to maintain a strong reference.
-                self.inProgressPhotoCaptureDelegates.append(photoCaptureProcessor)
+                self.inProgressPhotoCaptureDelegates[photoCaptureProcessor.requestedPhotoSettings.uniqueID] = photoCaptureProcessor
                 self.photoOutput.capturePhoto(with: photoSettings, delegate: photoCaptureProcessor)
             }
         }
     }
     
-    // MARK: Save Photos
-    public func readyToSave(){
-        for processor in self.inProgressPhotoCaptureDelegates {
-            processor.readyToSave()
+    //    MARK: Just Save Photo
+    /// - Tag: CapturePhoto
+    public func savePhoto(data: Data) {
+        if self.setupResult != .configurationFailed {
             
+            sessionQueue.async {
+                
+                var photoSettings = AVCapturePhotoSettings()
+                
+                // Capture HEIF photos when supported. Enable according to user settings and high-resolution photos.
+                if  self.photoOutput.availablePhotoCodecTypes.contains(.hevc) {
+                    photoSettings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.hevc])
+                }
+                
+                
+                photoSettings.isHighResolutionPhotoEnabled = true
+                
+                // Sets the preview thumbnail pixel format
+                if !photoSettings.__availablePreviewPhotoPixelFormatTypes.isEmpty {
+                    photoSettings.previewPhotoFormat = [kCVPixelBufferPixelFormatTypeKey as String: photoSettings.__availablePreviewPhotoPixelFormatTypes.first!]
+                }
+                
+                photoSettings.photoQualityPrioritization = .quality
+
+                let photoSaveProcessor = PhotoSaveProcessor(with: photoSettings, completionHandler: { [weak self] (photoSaveProcessor) in
+                    // When the capture is complete, remove a reference to the photo capture delegate so it can be deallocated.
+                    if let data = photoSaveProcessor.photoData {
+                        self?.photo = Photo(originalData: data)
+                        print("saving photo")
+                        self?.photosSaved = true
+                    } else {
+                        print("No photo data")
+                    }
+                                        
+                    self?.sessionQueue.async {
+                        self?.inProgressPhotoSaveDelegates[photoSaveProcessor.requestedPhotoSettings.uniqueID] = nil
+                    }
+                }, photoProcessingHandler: { [weak self] animate in
+                    // Animates a spinner while photo is processing
+                    if animate {
+                        self?.shouldShowSpinner = true
+                    } else {
+                        self?.shouldShowSpinner = false
+                    }
+                })
+                photoSaveProcessor.saveToPhotoLibrary(photoData: data)
+                
+                // The photo output holds a weak reference to the photo capture delegate and stores it in an array to maintain a strong reference.
+                self.inProgressPhotoSaveDelegates[photoSaveProcessor.requestedPhotoSettings.uniqueID] = photoSaveProcessor
+                }
         }
-        print("saving photos")
-        self.photosSaved = true
-        //print(self.photosSaved)
-
-        self.inProgressPhotoCaptureDelegates = []
-    }
-    
-    public func resetSavePhotos(){
-        self.photosSaved = false
-        //print(self.photosSaved)
-
     }
 }

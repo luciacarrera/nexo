@@ -1,5 +1,5 @@
 //
-//  CentralView.swift
+//  ScanningView.swift
 //  nexo_test
 //
 //  Created by Lucía on 4/27/22.
@@ -7,43 +7,71 @@
 
 import SwiftUI
 
+// This is the view for the phone that will act as a central device and be the viewfinder
 struct CentralView: View {
     
+    // MARK: Constants & Vars
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var bleManager: BLEManager
-    @State private var showAlert = false
-    @Environment(\.dismiss) var dismiss
-
-    @ViewBuilder
-    var body: some View {
-        
-        ZStack {
-            VStack{
-                Spacer()
-                Text("Trying to connect")
-                if bleManager.isConnected {
-                    Text("Connected").foregroundColor(.green)
-                } else{
-                    Text("Disconnected").foregroundColor(.red)
-                }
-                Spacer()
-                Text(bleManager.myReadString)
-                Spacer()
-            } // Vstack
-            .alert(isPresented: $showAlert) {
-                Alert(title: Text(bleManager.pairValue), message: Text("This is your pairing code"), dismissButton: .default(Text("Got it!")))
+    @State private var selectedDevice: Peripheral?
+    @State private var navigate = false
+    @State private var goBack = false
+    
+    var deviceList: some View {
+        VStack (spacing: 10) {
+            List(bleManager.scannedPeripherals) { peripheral in
+                Button (action: {
+                    selectedDevice = peripheral
+                }, label: {
+                    Text(peripheral.name)
+                    Spacer()
+                    Text(String(peripheral.rssi))
+                })
             }
-            
-        } // Zstack
-        .onAppear() {
-            showAlert.toggle()
-            print(showAlert)
-        } // onAppear
-        
-    } // body
-} // view
+        }
+    }
+    
+    var backButton: some View {
+        Button(action: {
+            print("\n\n\n\n\n")
+            bleManager.stopScanning()
+            bleManager.disconnectIfConnected()
+          self.presentationMode.wrappedValue.dismiss()
+        }) {
+          HStack {
+            Image(systemName: "arrow.left")
+            Text("Back")
+          }
+      }
+    }
+    
+    // MARK: Body
+    var body: some View {
+        NavigationView{
+            ZStack {
+                NavigationLink(destination: ViewfinderView().navigationBarBackButtonHidden(true), isActive: $navigate){
+                }
+                deviceList
+            }.alert(item: $selectedDevice) { show in
+                Alert(
+                    title: Text("Connect to " + show.name),
+                                message: Text("There is no undo"),
+                    primaryButton: .default(Text("Connect")) {
+                        bleManager.connect(peripheral: show.peripheral)
+                        navigate.toggle()
+                        },
+                    secondaryButton: .cancel()
+                )
+            }
+        }
+        .navigationBarItems(leading: backButton) // Nav bar items
+        .onAppear {
+            bleManager.startScanning()
+        } // on appear
+    } // End of body
+} // End of View
 
-struct CentralView_Previews: PreviewProvider {
+struct CameraPairingView_Previews: PreviewProvider {
     static var previews: some View {
         CentralView()
     }

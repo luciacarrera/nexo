@@ -36,36 +36,39 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     // central and peripheral bluetooth manager
     var myCentral: CBCentralManager!
     var myPeripheralManager: CBPeripheralManager!
+    var myCharacteristics: [CBCharacteristic]!
+    var connectedCentrals: [CBCentral]!
     
     // UUID constants in our BLEManager class: one for the peripheral service and another for its characteristic.
     let peripheralServiceUUID = CBUUID(string: "00001011-0000-1100-1000-00123456789A")
     
-    let notifyCharacteristicUUID = CBUUID(string: "00001012-0000-1100-1000-00123456789A")
-    let readCharacteristicUUID = CBUUID(string: "00001012-0000-1100-1000-00123456750A")
-    let sendCodeCharacteristicUUID = CBUUID(string: "00001012-0000-1100-1000-00123456691A")
-    let pairResultCharacteristicUUID = CBUUID(string: "00001012-0000-1100-1000-00123456692A")
+    let shutterUUID = CBUUID(string: "00001012-0000-1100-1000-00123456789A")
+    let picturesUUID = CBUUID(string: "00001012-0000-1100-1000-00123456750A")
+    let sendCodeUUID = CBUUID(string: "00001012-0000-1100-1000-00123456691A")
+    let pairResultUUID = CBUUID(string: "00001012-0000-1100-1000-00123456692A")
     var charsUUIDs: [CBUUID] = []
 
 
     // service and peripheral
     var myService: CBMutableService! // Beter name ??
     var myPeripheral: CBPeripheral!  // Beter name ??
-    var myReadData = Data() // Necessary ??
-    var myReadString: String = "Unknown"// Necessary ??
-    var myNotifyData = Data() // Necessary ??
-    var myNotifyString: String = "Unknown"// Necessary ??
+    @Published var click: Bool = false
     
     // status of bluetooth in device
     @Published var isSwitchedOn = false
     @Published var isConnected = false
     @Published var keepScanning = true // ??
-    @Published var isPairing = false
-    @Published var pairValue = "Waiting"
+    @Published var isPaired = false
+    @Published var pairValue = "?"
     @Published var isDisconnected = false// NOT the opposite of isConnected but kind of, will tell view to go back
-    @Published var pairSuccesful = -1
+    @Published var noPicturesTaken = true
 
     // array of peripherals found
     @Published var scannedPeripherals = [Peripheral]()
+    
+    // Camera Model
+    var camera: CameraModel?
+    
     
     //--------------------------------------------------------------------------------------------------------------------
     // MARK: BLE Initialization
@@ -103,7 +106,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         // If RSSI bigger than - 100 than it is considered too far away for a successful connection
         guard RSSI.intValue >= -100
                 else {
-                    print("Discovered perhiperal not in expected range, at %d", RSSI.intValue)
+                    print("CENTRAL // Discovered perhiperal not in expected range, at %d", RSSI.intValue)
                     return
         }
          
@@ -142,7 +145,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         // if it has changed then update actual array
         if hasChanged {
             self.scannedPeripherals = temp
-            print("Scanned Peripherals changed")
+            print("CENTRAL // Scanned Peripherals changed")
         }
     
     }
@@ -151,7 +154,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         
         // Successfully connected. Store reference to peripheral if not already done.
-        print("\n\nCentral connected\n\n")
+        print("\n\nCENTRAL // Connected\n\n")
         self.myPeripheral.discoverServices([peripheralServiceUUID]) // look for what we want to look for specifically
         
     }
@@ -160,7 +163,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
         
         // Handle error
-        print("Error connecting")
+        print("CENTRAL // Error connecting")
     }
     
     // Function to handle disconnection from Peripheral
@@ -172,7 +175,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         
         if error != nil {
             // Handle error
-            print("Error disconnecting")
+            print("CENTRAL // Error disconnecting")
             return
         }
     }
@@ -185,13 +188,14 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
         
         // print updating state
-        print("peripheralManagerDidUpdateState \(peripheral.state.rawValue)")
+        print("PERIPHERAL // peripheralManagerDidUpdateState \(peripheral.state.rawValue)")
         
     }
     
     // Function that notifies developer if peripheral has started advertising
     func peripheralManagerDidStartAdvertising(_ peripheral: CBPeripheralManager, error: Error?) {
-        print("Advertising started...")
+        print("PERIPHERAL //Advertising started...")
+        self.connectedCentrals = []
     }
     
     // Should this be somewhere else ??
@@ -201,32 +205,32 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         // Initialize service
         self.myService = CBMutableService(type: peripheralServiceUUID, primary: true)
         
-        //create read characteristic
-        let readCharData = "READ" // Characteristics with cached values must be read-only
-        let readChar = CBMutableCharacteristic.init(type: self.readCharacteristicUUID, properties: [.read], value: readCharData.data(using: .utf8), permissions: [.readable])
+        // create characteristic to write the pair code
+        let sendCodeChar = CBMutableCharacteristic.init(type: self.sendCodeUUID, properties: [.notify,.write], value:nil, permissions: [.readable,.writeable]) // Do I need all these properties/permisions ??
         
-        // create notification characteristic
-        let notifyChar = CBMutableCharacteristic.init(type: self.notifyCharacteristicUUID, properties: [.notify,.write], value:nil, permissions: [.readable,.writeable])
+        // create characteristic to read the result of the pair code
+        let pairResultChar = CBMutableCharacteristic.init(type: self.pairResultUUID, properties: [.read, .notify], value: nil, permissions: [.readable])
         
-        // create pairing characteristic
-        let sendCodeChar = CBMutableCharacteristic.init(type: self.sendCodeCharacteristicUUID, properties: [.notify,.write], value:nil, permissions: [.readable,.writeable]) // Do I need all these properties/permisions ??
+        // create characteristic to write the pair code
+        let shutterChar = CBMutableCharacteristic.init(type: self.shutterUUID, properties: [.notify,.write], value:nil, permissions: [.readable,.writeable]) // Do I need all these properties/permisions ??
         
-        //
-        let pairResultChar = CBMutableCharacteristic.init(type: self.pairResultCharacteristicUUID, properties: [.read, .notify], value: nil, permissions: [.readable])
+        // create characteristic to read the camera preview
+        let picturesChar = CBMutableCharacteristic.init(type: self.picturesUUID, properties: [.read, .notify], value: nil, permissions: [.readable])
         
         // safekeeping of all chars uuids added
-        self.charsUUIDs = [sendCodeCharacteristicUUID, notifyCharacteristicUUID, readCharacteristicUUID, pairResultCharacteristicUUID]
+        self.charsUUIDs = [sendCodeUUID, pairResultUUID, shutterUUID, picturesUUID]
         
         // add characteristics to service
         self.myService?.characteristics = []
-        self.myService?.characteristics?.append(readChar)
         self.myService?.characteristics?.append(sendCodeChar)
-        self.myService?.characteristics?.append(notifyChar)
         self.myService?.characteristics?.append(pairResultChar)
+        self.myService?.characteristics?.append(shutterChar)
+        self.myService?.characteristics?.append(picturesChar)
+
         
         // add service to peripheral manager
         self.myPeripheralManager.add(self.myService!) // DOES THIS WORK ??
-        print(self.myService ?? "No Service in Peripheral") // delete
+        print(self.myService ?? "PERIPHERAL //No Service in Peripheral") // delete
     }
     
     // Function that checks if the myservice has been added correctly
@@ -234,54 +238,108 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         
         // Handle error if service doesn't work
         if let error = error {
-            print("Add service failed: \(error.localizedDescription)")
+            print("PERIPHERAL //Add service failed: \(error.localizedDescription)")
             return
         }
         // Print in terminal if it works
-        print("Add service succeeded")
+        print("PERIPHERAL //Add service succeeded")
     }
     
     // Handles subscribtions
     func peripheralManager(_ peripheral: CBPeripheralManager, central: CBCentral, didSubscribeTo characteristic: CBCharacteristic) {
+        self.connectedCentrals.append(central)
     }
     
     // Handles write requests
     func peripheralManager(_ peripheral: CBPeripheralManager, didReceiveWrite requests: [CBATTRequest]) {
-        print("Received Write Request...")
         
         // Go through all requests
         for request in requests {
             
             // For pairing Request
-            if request.characteristic.uuid == sendCodeCharacteristicUUID{
-                
+            if request.characteristic.uuid == sendCodeUUID{
+                print("PERIPHERAL // Received Send Code Write Request...")
                 if let receivedValue = request.value { // unwrapping
                     // get pairValue
-                    self.pairValue =  String(data: receivedValue, encoding: .utf8) ?? "Waiting"
-                    print(pairValue)
-                    self.isPairing = true
+                    self.pairValue =  String(data: receivedValue, encoding: .utf8) ?? "no code yet"
+                    print("PERIPHERAL //\(pairValue)")
+                    if self.pairValue != "no code yet" {
+                        self.isPaired = true
+                    }
                     
                     // Tell central we received pairing value
                     peripheral.respond(to: request, withResult: .success)
                 }
             }
+            
+            // For shutter Request
+            if request.characteristic.uuid == shutterUUID{
+                print("PERIPHERAL // Received Shutter Write Request...")
+                if let receivedValue = request.value { // unwrapping
+                    let value = String(data: receivedValue, encoding: .utf8) ?? "shutter not pressed yet"
+                    print(value)
+                    print("PERIPHERAL // Told that shutter was pressed")
+                    // Tell central we received pairing value
+                    peripheral.respond(to: request, withResult: .success)
+                    
+                    // change value of click byte
+                    if let cam = self.camera {
+                        cam.capturePhoto()
+                        sendPhotoTaken()
+                    }
+                    
+                    // reset value
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                        self.click = false
+                    }
+                }
+            }
         }
     }
-    func peripheralManager(_ peripheral: CBPeripheralManager, didReceiveRead request: CBATTRequest) {
-        print("Received Read Request...")
-        if request.characteristic.uuid == pairResultCharacteristicUUID {
-            if self.pairSuccesful != -1 {
-                request.value = Data(bytes: &pairSuccesful, count: MemoryLayout.size(ofValue: pairSuccesful))
-                peripheral.respond(to: request, withResult: .success)
-            }
+    
+    func peripheralManager(_ peripheral: CBPeripheralManager, didReceiveRead request: CBATTRequest) { // dont think this is handled correctly
+        if request.characteristic.uuid == self.pairResultUUID {
+            print("PERIPHERAL // Received Pair Result Read Request...")
+            peripheral.respond(to: request, withResult: .success)
+        }
+        
+        if request.characteristic.uuid == self.picturesUUID {
+            print("PERIPHERAL // Received Pictures Read Request...")
+            peripheral.respond(to: request, withResult: .success)
         }
     }
     
     // I dont think I use this
     func peripheralManagerIsReady(toUpdateSubscribers peripheral: CBPeripheralManager) {
-            print("ready")
+            print("PERIPHERAL // ready")
     }
     
+    /*func updateValue( _ value: Data, for characteristic: CBMutableCharacteristic, onSubscribedCentrals centrals: [CBCentral]?) -> Bool {
+           return myPeripheralManager.updateValue(value, for: characteristic, onSubscribedCentrals: centrals)
+       }*/
+    
+    func sendPhotoTaken(){
+        // unwrap camera model just in case
+        if let cam = self.camera {
+            if cam.photo != nil { // unwrap photo just in case
+                // Search for pair result char
+                guard let chars = self.myService.characteristics else { return }
+                var myChar: CBMutableCharacteristic?
+                for char in chars {
+                    if char.uuid == picturesUUID {
+                        print("PERIPHERAL // sending photo")
+                        myChar = char as? CBMutableCharacteristic
+                        print("Pictures Data:\(cam.photo.originalData)")
+                                            
+                        //let data = value.data(using: .utf8)
+                        myPeripheralManager.updateValue(cam.photo.originalData, for: myChar!, onSubscribedCentrals: self.connectedCentrals)
+                        
+                    }
+                }
+            }
+        }
+        
+    }
 
     //--------------------------------------------------------------------------------------------------------------------
     // MARK: View Functions
@@ -297,7 +355,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
 
         // first check if service has been added
         if self.myService == nil {
-            print("Adding services and chars...")
+            print("PERIPHERAL //Adding services and chars...")
             self.addServicesAndCharacteristics()
         }
 
@@ -315,7 +373,13 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         self.myPeripheralManager.stopAdvertising()
         self.myPeripheralManager.removeAllServices()
         self.myService = nil
-        print("Advertising stopped...")
+        print("PERIPHERAL //Advertising stopped...")
+        
+        // make sure all status vars are reset
+        self.isConnected = false
+        self.isDisconnected = true
+        self.isPaired = false
+        self.noPicturesTaken = true
         
     }
     
@@ -325,7 +389,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
 
         self.scannedPeripherals = []
         self.myCentral.scanForPeripherals(withServices: [peripheralServiceUUID], options: nil)
-        print("Scanning started...")
+        print("CENTRAL //Scanning started...")
             /* DispatchQueue.main.asyncAfter(deadline: .now() + 10.0) {
                 self.startScanning()
             } */
@@ -336,31 +400,93 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         
         myCentral.stopScan()
         scannedPeripherals = []
-        print("Scanning stopped...")
+        print("CENTRAL //Scanning stopped...")
     }
     
     /* CONNECTING */
     // Function that view calls to tell central to connect to a specific peripheral
     func connect(peripheral: CBPeripheral) {
-        print("Peripheral to connect to: \(peripheral)")
+        print("CENTRA: //Peripheral to connect to: \(peripheral)")
         self.myPeripheral = peripheral
         self.myCentral.connect(peripheral, options: nil)
         self.isConnected = true
         self.myCentral.stopScan()
         self.myPeripheral.delegate = self
-        print("Connecting started...")
+        print("CENTRAL //Connecting started...")
      }
 
     // Function that view calls to tell central to disconnect to a specific peripheral
     func disconnect(peripheral: CBPeripheral) {
         myCentral.cancelPeripheralConnection(peripheral)
-        print("Disconnecting started...")
+        print("CENTRAL //Disconnecting started...")
         self.isDisconnected = true
         self.isConnected = false
+        self.isPaired = false
+        self.noPicturesTaken = true
+        self.pairValue = "?"
     }
     
-   
+    // function that peripheral uses to tell central if the pairing was successful or not
+    func pairSuccessful(result: Bool){
+        
+        // Search for pair result char
+        guard let chars = self.myService.characteristics else { return }
+        var myChar: CBMutableCharacteristic?
+        for char in chars {
+            if char.uuid == pairResultUUID {
+                myChar = char as? CBMutableCharacteristic
+                // Set value
+                var value = ""
+                if result {
+                    value = "success"
+                } else {
+                    value = "sad"
+                }
+                
+                // Update Value
+                let data = value.data(using: .utf8)
+                myPeripheralManager.updateValue(data!, for: myChar!, onSubscribedCentrals: self.connectedCentrals)
+            }
+        }
+    
+    }
+    
+    func shutterPressed(){
+        // Search for shutter char
+        guard let chars = self.myCharacteristics else { return }
+        for char in chars {
+            if char.uuid == shutterUUID {
+                
+                // Update click
+                if self.click == false {
+                    self.click = true
+                }else {
+                    self.click = false
+                }
+                let data = Data(bytes: &self.click,
+                                     count: MemoryLayout.size(ofValue: click))
+                print("Shutter Pressed data: \(data)")
+                
+                // ask for a response and write value
+                self.myPeripheral.writeValue(data, for: char, type: .withResponse)
+
+                print("CENTRAL // telling perihpheral that shutter was pressed")
+            }
+        }
+        
+    }
+    func disconnectIfConnected(){
+        if self.isConnected {
+            disconnect(peripheral: self.myPeripheral)
+        }
+    }
+    
+    func configureCamera(camera: CameraModel){
+        self.camera = camera
+    }
 }
+
+
 
     
 //------------------------------------------------------------------------------------------------------------------------
@@ -371,13 +497,13 @@ extension BLEManager: CBPeripheralDelegate {
     // Function that discover the services in the peripheral
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         if let error = error {
-            print("Error discovering services: %s", error.localizedDescription)
+            print("CENTRAL // Error discovering services: %s", error.localizedDescription)
             return
         }
         
         // Loop through the newly filled peripheral.services array, just in case there's more than one.
         guard let peripheralServices = peripheral.services else { return }
-        print("Discovering services...")
+        print("CENTRAL // Discovering services...")
 
         for service in peripheralServices {
             // must have all characteristics uuid
@@ -391,31 +517,38 @@ extension BLEManager: CBPeripheralDelegate {
         
         // If error discovering characteristics
         if let error = error {
-            print("Error discovering characteristics: %s", error.localizedDescription)
+            print("CENTRAL // Error discovering characteristics: %s", error.localizedDescription)
             return
         }
         
-        print("Discovering characteristics...")
+        print("CENTRAL // Discovering characteristics...")
         
         // Unwrap characteristics
         if let chars = service.characteristics {
+            self.myCharacteristics = service.characteristics
             for characteristic in chars {
                 
-                /*if characteristic.properties.contains(.read) {
-                    print("\(characteristic.uuid): properties contains .read")
-                    peripheral.readValue(for: characteristic)
-                }*/
-                if characteristic.uuid == pairResultCharacteristicUUID {
-                    print("\(characteristic.uuid): properties contains .read")
+                if characteristic.uuid == pairResultUUID {
+                    print("\(characteristic.uuid): pair result characteristic with read and notify")
                     peripheral.readValue(for: characteristic)
                     // We are now subscribed to characteristics
                     peripheral.setNotifyValue(true, for: characteristic)
                     peripheral.readValue(for: characteristic)
-                    print("reading pair result")
+                    print("CENTRAL // reading pair result")
                 }
+                if characteristic.uuid == picturesUUID {
+                    print("\(characteristic.uuid): pictures characteristic with read and notify")
+                    peripheral.readValue(for: characteristic)
+                    
+                    // We are now subscribed to characteristics
+                    peripheral.setNotifyValue(true, for: characteristic)
+                    peripheral.readValue(for: characteristic)
+                    print("CENTRAL // reading pictures result")
+                }
+                
                 // Pairing Notification
-                if characteristic.uuid == sendCodeCharacteristicUUID{
-                    print("\(characteristic.uuid): properties contains .notify")
+                if characteristic.uuid == sendCodeUUID{
+                    print("CENTRAL // \(characteristic.uuid): send code characteristic with write and notify")
                     
                     // We are now subscribed to characteristics
                     peripheral.setNotifyValue(true, for: characteristic)
@@ -430,9 +563,16 @@ extension BLEManager: CBPeripheralDelegate {
                     if let mydata = data {
                         let mystr = String(data: mydata, encoding: .utf8)!
                         print(mystr)
-
                     }
-                    print("written send code")
+                    print("CENTRAL // written code")
+                }
+                
+                // Shutter Notification
+                if characteristic.uuid == shutterUUID{
+                    print("CENTRAL // \(characteristic.uuid): shutter characteristic with write and notify")
+                    // We are now subscribed to characteristics
+                    peripheral.setNotifyValue(true, for: characteristic)
+                    
                 }
             }
         }
@@ -441,18 +581,11 @@ extension BLEManager: CBPeripheralDelegate {
     // Function to check pairing
     func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
         
-        if characteristic.uuid == sendCodeCharacteristicUUID {
-            if let error = error {
-                disconnect(peripheral: peripheral)
-                print("Error getting write Notification: %s", error.localizedDescription)
-                return
-            }
-        } else {
-            if let error = error {
-                print("Error getting write Notification: %s", error.localizedDescription)
-                return
-            }
-        } // End of if
+        if let error = error {
+            disconnect(peripheral: peripheral)
+            print("CENTRAL // Error getting write Notification : %s", error.localizedDescription)
+            return
+        }
 
     }
     
@@ -462,49 +595,55 @@ extension BLEManager: CBPeripheralDelegate {
         // Handles type of characteristic
         switch characteristic.uuid {
             
-            // If read characteristic
-            case readCharacteristicUUID:
-                print(characteristic.value ?? "No value")
-                guard let characteristicData = characteristic.value,
-                      let stringFromData = String(data: characteristicData, encoding: .utf8) else { return }
-                self.myReadData.append(characteristicData)
-                self.myReadString = stringFromData
-            
-            // If notify characteristic
-            case notifyCharacteristicUUID:
-                print(characteristic.value ?? "No value")
-                guard let characteristicData = characteristic.value,
-                      let stringFromData = String(data: characteristicData, encoding: .utf8) else { return }
-                self.myNotifyData = characteristicData
-                self.myNotifyString = stringFromData
+            // If send code characteristic characteristic
+            case sendCodeUUID:
+                print(characteristic.value ?? "send code has no value")
+                /*guard let characteristicData = characteristic.value,
+                let stringFromData = String(data: characteristicData, encoding: .utf8) else { return }*/
             
             // If send code characteristic characteristic
-            case sendCodeCharacteristicUUID:
-                print(characteristic.value ?? "No value")
-                guard let characteristicData = characteristic.value,
-                let stringFromData = String(data: characteristicData, encoding: .utf8) else { return }
+            case shutterUUID:
+                print("Shutter value: ")
+                print(characteristic.value ?? "no value")
             
             // If pair result characteristic
-            case pairResultCharacteristicUUID:
-                print(characteristic.value ?? "Waiting")
+            case pairResultUUID:
+                print("Pair Result value: ")
+                print(characteristic.value ?? "no value")
                 guard let characteristicData = characteristic.value,
-                      let byte = characteristicData.first else { return }
-                if byte == 1 {
-                    self.disconnect(peripheral: peripheral)
-                } else {
-                    print("send code correct success")
+                let stringFromData = String(data: characteristicData, encoding: .utf8) else { return }
+                print(stringFromData)
+                if stringFromData == "success" {
+                    self.isPaired = true
                 }
-
+                if stringFromData == "sad" {
+                    self.disconnect(peripheral: peripheral)
+                }
+            
+        case picturesUUID:
+            print("Pictures value:")
+            print(characteristic.value ?? "no value")
+            
+            guard let characteristicData = characteristic.value else { return }
+            if let cam = self.camera {
+                print("Saving Pictures")
+                cam.savePhoto(photoData: characteristicData)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                    self.noPicturesTaken = false
+                }
+            }
+            
+            
             // If other type of characteristic
             default:
-              print("Unhandled Characteristic UUID: \(characteristic.uuid)")
+              print("CENTRAL // Unhandled Characteristic UUID: \(characteristic.uuid)")
         }
     }
     
     // Function that handles errors if subscribtion or unsubscribtion has errors
     func peripheral(_ peripheral: CBPeripheral, didUpdateNotificationStateFor characteristic: CBCharacteristic, error: Error?) {
         if let error = error {
-            print("Error subscribing to characteristics: %s", error.localizedDescription)
+            print("CENTRAL // Error subscribing to characteristics: %s", error.localizedDescription)
             return
         }
         

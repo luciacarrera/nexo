@@ -66,8 +66,7 @@ extension PhotoCaptureProcessor: AVCapturePhotoCaptureDelegate {
     
     /// - Tag: DidFinishProcessingPhoto
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
-        print("finished processing")
-
+        
         DispatchQueue.main.async {
             self.photoProcessingHandler(false)
         }
@@ -77,10 +76,10 @@ extension PhotoCaptureProcessor: AVCapturePhotoCaptureDelegate {
         } else {
             photoData = photo.fileDataRepresentation()
         }
-        
     }
     
-    func saveToPhotoLibrary(_ photo: Data) {
+    // MARK: Saves capture to photo library
+    func saveToPhotoLibrary(_ photoData: Data) {
         
         PHPhotoLibrary.requestAuthorization { status in
             if status == .authorized {
@@ -88,7 +87,8 @@ extension PhotoCaptureProcessor: AVCapturePhotoCaptureDelegate {
                     let options = PHAssetResourceCreationOptions()
                     let creationRequest = PHAssetCreationRequest.forAsset()
                     options.uniformTypeIdentifier = self.requestedPhotoSettings.processedFileType.map { $0.rawValue }
-                    creationRequest.addResource(with: .photo, data: photo, options: options)
+                    creationRequest.addResource(with: .photo, data: photoData, options: options)
+                    
                     
                 }, completionHandler: { _, error in
                     if let error = error {
@@ -101,7 +101,6 @@ extension PhotoCaptureProcessor: AVCapturePhotoCaptureDelegate {
                 }
                 )
             } else {
-                
                 DispatchQueue.main.async {
                     self.completionHandler(self)
                 }
@@ -118,16 +117,16 @@ extension PhotoCaptureProcessor: AVCapturePhotoCaptureDelegate {
             }
             return
         } else {
-           
-            print("finished capture")
-        }
+            guard let data  = photoData else {
+                DispatchQueue.main.async {
+                    self.completionHandler(self)
+                }
+                return
+            }
             
-    } // photoOutput
-    
-    func readyToSave(){
-        self.saveToPhotoLibrary(photoData!)
+            self.saveToPhotoLibrary(data)
+        }
     }
-
-    
 }
+
 

@@ -18,7 +18,7 @@ final class CameraModel: ObservableObject {
     private let service = CameraService()
     
     @Published var photo: Photo!
-    
+        
     @Published var showAlertError = false
     
     @Published var isFlashOn = false
@@ -32,6 +32,7 @@ final class CameraModel: ObservableObject {
     var session: AVCaptureSession
     
     private var subscriptions = Set<AnyCancellable>()
+    private var bleManager: BLEManager?
     
     // MARK: Initializer
     init() {
@@ -54,15 +55,14 @@ final class CameraModel: ObservableObject {
         }
         .store(in: &self.subscriptions)
         
-        /*service.$willCapturePhoto.sink { [weak self] (val) in
+        service.$willCapturePhoto.sink { [weak self] (val) in
             self?.willCapturePhoto = val
-        }*/
-        self.willCapturePhoto = service.willCapturePhoto
+        }.store(in: &self.subscriptions)
         
         service.$photosSaved.sink { [weak self] (val) in
             self?.photosSaved = val
-        }
-        .store(in: &self.subscriptions)
+        }.store(in: &self.subscriptions)
+        
     }
     
     // MARK: Functions
@@ -87,11 +87,8 @@ final class CameraModel: ObservableObject {
         service.flashMode = service.flashMode == .on ? .off : .on
     }
     
-    func savePhotos() {
-        service.readyToSave()
+    func savePhoto(photoData: Data){
+        service.savePhoto(data: photoData)
     }
     
-    func resetSavePhotos(){
-        service.resetSavePhotos()
-    }
 }
