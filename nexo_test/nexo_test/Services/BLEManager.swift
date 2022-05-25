@@ -329,10 +329,24 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
                     if char.uuid == picturesUUID {
                         print("PERIPHERAL // sending photo")
                         myChar = char as? CBMutableCharacteristic
-                        print("Pictures Data:\(cam.photo.originalData)")
-                                            
-                        //let data = value.data(using: .utf8)
-                        myPeripheralManager.updateValue(cam.photo.originalData, for: myChar!, onSubscribedCentrals: self.connectedCentrals)
+                        
+                        let buffer: [UInt8]
+                        buffer = Array(cam.photo.originalData)
+                        
+                        let biggerBuffer = createBufferToSend(buffer)
+             
+                        let imageSize = biggerBuffer.count
+                        // let imageProgress = -1
+             
+                        let start = "I:"+String(imageSize)
+                        
+                        myPeripheralManager.updateValue(start.data(using: .utf8)!, for: myChar!, onSubscribedCentrals: self.connectedCentrals)
+             
+                        biggerBuffer.forEach{ b in
+                        let data = NSData(bytes: b, length: MemoryLayout<UInt8>.size*b.count)
+                        
+                        myPeripheralManager.updateValue(data as Data, for: myChar!, onSubscribedCentrals: self.connectedCentrals)
+                        }
                         
                     }
                 }
@@ -484,9 +498,25 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     func configureCamera(camera: CameraModel){
         self.camera = camera
     }
-}
+} //End of send photos
 
-
+    func createBufferToSend(_ buffer: [UInt8]) -> [[UInt8]] {
+        var bytesInArray = 0
+        var bufferIndex = 0
+        var biggerBuffer: [[UInt8]] = []
+        biggerBuffer.append([])
+ 
+        buffer.forEach{b in
+            if(bytesInArray == 20) {
+                biggerBuffer.append([])
+                bufferIndex += 1
+                bytesInArray = 0
+            }
+            biggerBuffer[bufferIndex].append(b)
+            bytesInArray += 1
+        }
+        return biggerBuffer
+    }
 
     
 //------------------------------------------------------------------------------------------------------------------------
