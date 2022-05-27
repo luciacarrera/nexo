@@ -475,6 +475,7 @@ public class CameraService {
                     self?.sessionQueue.async {
                         self?.inProgressPhotoCaptureDelegates[photoCaptureProcessor.requestedPhotoSettings.uniqueID] = nil
                     }
+                    
                 }, photoProcessingHandler: { [weak self] animate in
                     // Animates a spinner while photo is processing
                     if animate {
@@ -487,8 +488,10 @@ public class CameraService {
                 // The photo output holds a weak reference to the photo capture delegate and stores it in an array to maintain a strong reference.
                 self.inProgressPhotoCaptureDelegates[photoCaptureProcessor.requestedPhotoSettings.uniqueID] = photoCaptureProcessor
                 self.photoOutput.capturePhoto(with: photoSettings, delegate: photoCaptureProcessor)
+               
                 
-            }
+            } // end of sessionQueue
+            
         }
     }
     
