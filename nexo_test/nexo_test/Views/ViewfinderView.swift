@@ -93,7 +93,6 @@ struct ViewfinderView: View {
         if bleManager.isPaired {
             GeometryReader { reader in
                 let width = reader.size.width
-                let height43 = width / 3 * 4
                     VStack {
                         Text("Viewfinder")
                         if model.photosSaved == false{

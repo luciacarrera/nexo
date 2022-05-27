@@ -21,7 +21,7 @@ struct PeripheralView: View {
           self.presentationMode.wrappedValue.dismiss()
         }) {
           HStack {
-            Image(systemName: "arrow.left")
+            Image(systemName: "chevron.backward")
             Text("Back")
           } // End of HStack
       }

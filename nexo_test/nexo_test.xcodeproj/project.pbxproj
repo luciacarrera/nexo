@@ -176,8 +176,8 @@
 			children = (
 				9EAA22EE2819E733005E1B95 /* ConnectionView.swift */,
 				9EAA22FE2819F860005E1B95 /* PeripheralView.swift */,
-				9EAA22F02819E7EA005E1B95 /* CentralView.swift */,
 				9EAA22F72819EBDA005E1B95 /* CameraView.swift */,
+				9EAA22F02819E7EA005E1B95 /* CentralView.swift */,
 				9EAA2300281A0BE6005E1B95 /* ViewfinderView.swift */,
 				9E2B0A0E283C58430025E0E5 /* testing.swift */,
 			);

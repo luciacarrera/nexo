@@ -15,10 +15,6 @@ struct CameraView: View {
     @State private var showAlert = false
     @Environment(\.dismiss) var dismiss
     
-    var pairingCodeAlert: Alert {
-        Alert(title: Text(bleManager.pairValue), message: Text("This is your pairing code"), dismissButton: .default(Text("Got it!")))
-    }
-    
     // MARK: Camera Constants & Vars
     @StateObject var model = CameraModel()
     @State var currentZoomFactor: CGFloat = 1.0
