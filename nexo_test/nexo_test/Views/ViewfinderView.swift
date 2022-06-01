@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ViewfinderView: View {
     
+    
     // MARK: BLE Constants & Vars
     @EnvironmentObject var bleManager: BLEManager
     
